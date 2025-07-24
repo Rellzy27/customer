@@ -12,7 +12,9 @@ class Pesanan extends Model
     protected $table = 'pesanan';
     protected $primaryKey = 'kd_pesanan';
     protected $fillable = [
+        'kd_pelanggan',
         'deskripsi_pesanan',
+        'tanggal',
         'status',
         'progres',
         'kd_karyawan',

@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use App\Notifications\PelangganVerifyEmailQueued;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,10 +19,13 @@ class Pelanggan extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'nama_pelanggan',
-        'email',
-        'password',
         'nama_perusahaan',
         'telp_pelanggan',
+        'username',
+        'alamat_pelanggan',
+        'foto',
+        'email',
+        'password',
     ];
 
     /**
@@ -39,4 +43,9 @@ class Pelanggan extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new PelangganVerifyEmailQueued());
+    }
 }
