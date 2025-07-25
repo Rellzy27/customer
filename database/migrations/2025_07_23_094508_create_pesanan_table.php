@@ -27,13 +27,15 @@ return new class extends Migration {
 
         Schema::create('pesanan_detail', function (Blueprint $table) {
             $table->id('kd_pesanan_detail');
-            $table->unsignedBigInteger('kd_karyawan');
-            $table->unsignedBigInteger('kd_pesanan');
-            $table->text('keterangan');
+            $table->unsignedBigInteger('kd_karyawan')->nullable();
+            $table->unsignedBigInteger('kd_pelanggan')->nullable();
+            $table->unsignedBigInteger('kd_pesanan')->nullable();
+            $table->text('keterangan')->nullable();
             $table->string('dibuat_oleh', 50);
             $table->timestamps();
 
             $table->foreign('kd_karyawan')->references('kd_karyawan')->on('karyawan');
+            $table->foreign('kd_pelanggan')->references('kd_pelanggan')->on('pelanggan');
             $table->foreign('kd_pesanan')->references('kd_pesanan')->on('pesanan');
         });
 

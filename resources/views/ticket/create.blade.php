@@ -12,16 +12,16 @@
             <div class="card-body">
                 <form action="{{ route('ticket.store') }}" method="POST">
                     @csrf
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="name">Nama</label>
                         <input type="text" class="form-control" id="name" name="name"
                             value="{{ $user->nama_pelanggan }}" readonly>
                     </div>
-                    <div class="form-group">
-                        <label for="deskripsi_pesanan">deskripsi_pesanan</label>
+                    <div class="form-group mb-3">
+                        <label for="deskripsi_pesanan">Deskripsi Pesanan</label>
                         <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4" required></textarea>
                     </div>
-                    <div class="mb-3">
+                    <div class="form-group mb-3">
                         <label for="appointment_date">Appointment Date</label>
                         <div class="input-group">
                             <span class="input-group-text">
@@ -33,7 +33,7 @@
                                 </svg>
                             </span>
                             <input data-datepicker="" class="form-control" id="appointment_date" name="tanggal" type="text"
-                                placeholder="dd/mm/yyyy" required>
+                                placeholder="dd/mm/yyyy" autocomplete="off" required>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>

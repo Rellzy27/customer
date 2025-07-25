@@ -12,6 +12,7 @@ Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'
 Route::post('/ganti-password', [App\Http\Controllers\Auth\ProfileController::class, 'updatePassword'])->name('ganti-password');
 
 Route::post('/logout', [App\Http\Controllers\Auth\LogoutController::class, 'store'])->name('logout');
+Route::get('/logout', [App\Http\Controllers\Auth\LogoutController::class, 'store'])->name('logout');
 
 Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\Pesanan;
+use App\Models\Pesanan_Detail;
+use App\Models\Pesanan_Jasa;
+use App\Models\PesananBarang;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +25,23 @@ class TicketController extends Controller
         return view('ticket.create');
     }
 
-    public function detail($item)
+    public function detail($ticket)
     {
-        $pesanan = Pesanan::find($item);
-        return view('ticket.detail', compact('pesanan'));
-    }
+        $auth_check = Auth::guard('pelanggan')->user()->kd_pelanggan;
 
+        if (Pesanan::find($ticket) == null || $auth_check != Pesanan::find($ticket)->kd_pelanggan) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $pesanan = Pesanan::find($ticket);
+        $pesanan_barang = PesananBarang::where('kd_pesanan_detail', $pesanan->kd_pesanan_detail)->get();
+        $pesanan_jasa = Pesanan_Jasa::where('kd_pesanan_detail', $pesanan->kd_pesanan_detail)->get();
+        foreach ($pesanan_barang as $barang) {
+            $barang->barang = Barang::find($barang->kd_barang);
+        }
+
+        return view('ticket.detail', compact('pesanan', 'pesanan_barang', 'pesanan_jasa'));
+    }
     public function store(Request $request)
     {
         $validated = Validator::make($request->all(), [
@@ -44,6 +59,14 @@ class TicketController extends Controller
             'tanggal' => $request->tanggal,
             'dibuat_oleh' => Auth::guard('pelanggan')->user()->nama_pelanggan
         ]);
+
+        if ($pesanan) {
+            Pesanan_Detail::create([
+                'kd_pelanggan' => Auth::guard('pelanggan')->user()->kd_pelanggan,
+                'kd_pesanan' => $pesanan->kd_pesanan,
+                'dibuat_oleh' => Auth::guard('pelanggan')->user()->nama_pelanggan
+            ]);
+        }
 
         if ($pesanan) {
             return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibuat.');
