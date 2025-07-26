@@ -199,6 +199,7 @@ Software. Please contact us to request a removal.
     <script src="{{ asset('volt/vendor/simplebar/dist/simplebar.min.js') }}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="{{ asset('volt/assets/js/volt.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     @yield('js')
 
