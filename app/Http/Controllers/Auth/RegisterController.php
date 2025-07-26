@@ -37,8 +37,7 @@ class RegisterController extends Controller
     
     public function register(Request $request)
     {
-        try {
-            $validatedData = $request->validate([
+            $validatedData = Validator::make($request->all(), [
                 'nama_pelanggan' => ['required', 'string', 'max:255'],
                 'nama_perusahaan' => ['nullable', 'string', 'max:255'],
                 'alamat_pelanggan' => ['nullable', 'string', 'max:255'],
@@ -46,21 +45,27 @@ class RegisterController extends Controller
                 'username' => ['required', 'string', 'max:255', 'unique:pelanggan'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:pelanggan'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ], [
+                'telp_pelanggan.unique' => 'Nomor telepon sudah terdaftar.',
+                'username.unique' => 'Username sudah terdaftar.',
+                'email.unique' => 'Email sudah terdaftar.',
+                'password.min' => 'Password minimal 8 karakter.',
+                'password.confirmed' => 'Password tidak cocok.',
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            report($e);
-            return response()->json(['errors' => $e->errors()], 422);
-        }
+
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+            }
 
 
         $user = Pelanggan::create([
-            'nama_pelanggan' => $validatedData['nama_pelanggan'],
-            'nama_perusahaan' => $validatedData['nama_perusahaan'],
-            'alamat_pelanggan' => $validatedData['alamat_pelanggan'],
-            'telp_pelanggan' => $validatedData['telp_pelanggan'],
-            'username' => $validatedData['username'],
-            'email' => $validatedData['email'],
-            'password' => Hash::make($validatedData['password']),
+            'nama_pelanggan' => $request->nama_pelanggan,
+            'nama_perusahaan' => $request->nama_perusahaan,
+            'alamat_pelanggan' => $request->alamat_pelanggan,
+            'telp_pelanggan' => $request->telp_pelanggan,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
         
         event(new Registered($user));
@@ -70,5 +75,6 @@ class RegisterController extends Controller
         return $request->wantsJson()
                     ? new JsonResponse([], 201)
                     : redirect()->route('verification.notice');
+
     }
 }

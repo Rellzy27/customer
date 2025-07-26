@@ -76,7 +76,13 @@
                 $statuses = ['Ticket Created', 'Ticket Received', 'In Progress', 'Done'];
             @endphp
             <ul>
-                @foreach ($statuses as $status)
+                @if ($pesanan->status == 2)
+                    <li class="completed">
+                        <div class="step-label">Batal</div>
+                        <div class="step-info">Pesanan telah dibatalkan.</div>
+                    </li>
+                @else
+                    @foreach ($statuses as $status)
                 <li class="
                     @if ($loop->iteration < $pesanan->progres)
                         completed
@@ -102,7 +108,8 @@
                             @endswitch
                         </div>
                     </li>
-                @endforeach
+                    @endforeach
+                @endif
             </ul>
         </div>
     </div>

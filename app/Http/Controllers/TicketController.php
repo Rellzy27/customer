@@ -80,4 +80,12 @@ class TicketController extends Controller
         return view('ticket.edit', compact('pesanan'));
     }
 
+    public function cancel($ticket)
+    {
+        $pesanan = Pesanan::find($ticket);
+        $pesanan->status = '2';
+        $pesanan->save();
+        return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibatalkan.');
+    }
+
 }

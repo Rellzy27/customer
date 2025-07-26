@@ -3,8 +3,7 @@
 @section('title', 'Ticket')
 
 @section('content')
-<div class="modal fade" id="modalNotification" tabindex="-1" role="dialog" aria-labelledby="modalTitleNotify"
-    aria-hidden="true">
+<div class="modal fade" id="modalNotification" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -64,7 +63,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$ticket->deskripsi_pesanan}}</td>
                                     <td>{{$ticket->tanggal}}</td>
-                                    <td>
+                                    <td class="text-center">
                                         @if ($ticket->status == 1)
                                             <span class="badge bg-success">Done</span>
                                         @elseif ($ticket->status == 0 && $ticket->progres == 1)
@@ -73,9 +72,11 @@
                                             <span class="badge bg-warning">Ticket Recieved</span>
                                         @elseif ($ticket->status == 0 && $ticket->progres == 3)
                                             <span class="badge bg-secondary">In Progress</span>
+                                        @elseif ($ticket->status == 2)
+                                            <span class="badge bg-danger">Batal</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{route('ticket.detail', $ticket->kd_pesanan)}}" class="btn btn-info">
                                             <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -87,28 +88,31 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            data-bs-target="#modalNotification">
-                                            <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                </path>
-                                            </svg>
-                                        </button>
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#modalCancel">
-                                            <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                </path>
-                                            </svg>
-                                        </button>
+                                        @if ( $ticket->status != 2 && $ticket->progres != 3 && \Carbon\Carbon::now()->diffInHours($ticket->created_at) < 24)
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#modalNotification">
+                                                <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                            <button type="button" href="#" class="btn btn-danger"
+                                                onclick="confirmCancel({{$ticket->kd_pesanan}})">
+                                                <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        @endif
+
                                     </td>
                                 </tr>
-                                @empty
-                                    <td colspan="5" class="text-center">Data Kosong</td>
+                            @empty
+                                <td colspan="5" class="text-center">Data Kosong</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -118,4 +122,25 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+<script>
+    function confirmCancel($ticket) {
+        Swal.fire({
+            title: 'Batalkan Pesanan?',
+            text: "Pesanan akan dibatalkan?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Batalkan!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "{{route('ticket.cancel', ':id')}}".replace(':id', $ticket);
+            }
+        });
+    }
+
+</script>
 @endsection
