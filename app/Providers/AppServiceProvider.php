@@ -22,7 +22,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::define('auth', function ($user = null) {
-            return Auth::guard('pelanggan')->check();
+            if (!Auth::guard('pelanggan')->check()) {
+                abort(401);
+            }
+            return true;
         });
     }
 }
