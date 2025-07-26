@@ -1,6 +1,6 @@
 @extends('layouts.volt')
 
-@section('title', _('Page Not Found'))
+@section('title', __('Page Not Found'))
 
 @section('content')
     <main>

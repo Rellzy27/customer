@@ -88,7 +88,7 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        @if ( $ticket->status != 2 && $ticket->progres != 3 && \Carbon\Carbon::now()->diffInHours($ticket->created_at) < 24)
+                                        @if ( $ticket->status != 2 && $ticket->progres != 3 && $ticket->progres != 4 && \Carbon\Carbon::now()->diffInHours($ticket->created_at) < 24)
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#modalNotification">
                                                 <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"

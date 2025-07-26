@@ -1,6 +1,6 @@
 @extends('layouts.volt')
 
-@section('title', _('Too many requests'))
+@section('title', __('Too many requests'))
 
 @section('content')
     <main>

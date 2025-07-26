@@ -19,7 +19,8 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="deskripsi_pesanan">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4" required></textarea>
+                        <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4"
+                            required></textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label for="appointment_date">Appointment Date</label>
@@ -32,7 +33,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </span>
-                            <input data-datepicker="" class="form-control" id="appointment_date" name="tanggal" type="text"
+                            <input class="form-control" id="appointment_date" name="tanggal" type="text"
                                 placeholder="dd/mm/yyyy" autocomplete="off" required>
                         </div>
                     </div>
@@ -41,4 +42,19 @@
             </div>
         </div>
     </div>
-    @endsection
+</div>
+@endsection
+
+@section('js')
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const datepickerEl = document.getElementById('appointment_date');
+        if (datepickerEl) {
+            new Datepicker(datepickerEl, {
+                format: 'dd/mm/yyyy',
+                autohide: true,
+            });
+        }
+    });
+</script>
+@endsection

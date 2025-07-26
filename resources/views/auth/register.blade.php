@@ -30,15 +30,18 @@
 <main class="d-flex align-items-center bg-soft py-4" style="min-height: 100vh;">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 d-flex align-items-center justify-content-center">
+            <div
+                class="col-12 col-lg-6 order-2 order-lg-1 text-center d-flex align-items-center justify-content-center d-none d-lg-block mt-5">
+                <img class="img-fluid w-75" src="{{ asset('volt/assets/img/illustrations/sign_up.svg')}}"
+                    alt="Login Illustration">
+            </div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2">
                 <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100" style="max-width: 600px;">
                     <div class="text-center text-md-center mb-4 mt-md-0">
                         <h1 class="mb-0 h3">Buat Akun Baru</h1>
                     </div>
-
                     <form method="POST" action="{{ route('register') }}" id="multi-step-form" class="mt-4" novalidate>
                         @csrf
-
                         <fieldset class="form-step active" data-step="1">
                             <h5 class="mb-4">Informasi Akun</h5>
                             <div class="row">
@@ -55,13 +58,13 @@
                                             autofocus>
                                     </div>
                                     @error('nama_pelanggan')
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-4 col-md-6">
-                                    <label for="nama_perusahaan">Nama Perusahaan (Opsional)</label>
+                                    <label for="nama_perusahaan">Nama Perusahaan</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
                                                 viewBox="0 0 20 20">
@@ -224,7 +227,7 @@
             let isValid = true;
 
             // Find all required inputs in the current step
-            currentStep.find('input[required]').each(function() {
+            currentStep.find('input[required]').each(function () {
                 // If the input is empty...
                 if ($(this).val().trim() === '') {
                     isValid = false; // Mark form as invalid

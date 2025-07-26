@@ -6,7 +6,10 @@
 <main class="d-flex align-items-center bg-soft py-4" style="min-height: 100vh;">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="col-12 col-lg-6 order-2 order-lg-1 text-center d-flex align-items-center justify-content-center d-none d-lg-block">
+                <img class="img-fluid w-75" src="{{ asset('volt/assets/img/illustrations/login.svg')}}" alt="Login Illustration">
+            </div>
+            <div class="col-12 col-lg-6 order-1 order-lg-2">
                 <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5">
                     <div class="text-center text-md-center mb-4 mt-md-0">
                         <h1 class="mb-0 h3">Masuk ke Akun Anda</h1>
@@ -18,7 +21,6 @@
                     @endif
                     <form method="POST" action="{{ route('login') }}" class="mt-4">
                         @csrf
-                        <!-- Email, Username, atau No. Telepon -->
                         <div class="form-group mb-4">
                             <label for="login">Email / Username / No. Telepon</label>
                             <div class="input-group">
@@ -30,7 +32,6 @@
                             @enderror
                         </div>
 
-                        <!-- Password -->
                         <div class="form-group">
                             <div class="form-group mb-4">
                                 <label for="password">Kata Sandi</label>
@@ -63,15 +64,16 @@
                         </div>
                     </form>
                     
-                    <div class="d-flex justify-content-center align-items-center mt-4">
+                    <!-- <div class="d-flex justify-content-center align-items-center mt-4">
                         <span class="fw-normal">
                             Belum punya akun?
                             <a href="{{ route('register') }}" class="fw-bold">Buat akun</a>
                         </span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 </main>
 @endsection
+

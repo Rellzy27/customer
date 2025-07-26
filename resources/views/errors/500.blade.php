@@ -1,6 +1,6 @@
 @extends('layouts.volt')
 
-@section('title', _('Server Error'))
+@section('title', __('Server Error'))
 
 @section('content')
     <main>
