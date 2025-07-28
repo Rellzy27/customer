@@ -33,7 +33,7 @@ Route::middleware(['can:auth'])->group(function () {
 
 Route::middleware(['can:auth', TicketOwnership::class])->group(function () {
     Route::get('/ticket/{ticket}/detail', [App\Http\Controllers\TicketController::class, 'detail'])->name('ticket.detail');
-    Route::get('/ticket/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('ticket.edit');
+    Route::put('/ticket/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('ticket.edit');
     Route::get('/ticket/{ticket}/cancel', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
 });
 

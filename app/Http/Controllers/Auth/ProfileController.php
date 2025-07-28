@@ -46,7 +46,7 @@ class ProfileController extends Controller
             $user->save();
 
             return response()->json([
-                'success' => 'Foto sukses diupload.',
+                'toast_success' => 'Foto sukses diupload.',
                 'path' => Storage::url($path)
             ]);
         }
@@ -66,7 +66,7 @@ class ProfileController extends Controller
         $user->update($request->all());
 
         return response()->json([
-            'success' => 'Profil sukses diupdate!',
+            'toast_success' => 'Profil sukses diupdate!',
             'user' => $user->fresh()
         ]);
     }
@@ -92,7 +92,7 @@ class ProfileController extends Controller
         $user->save();
 
         if ($user->wasChanged()) {
-            return redirect()->route('profile')->with('success', 'Password berhasil diubah.');
+            return redirect()->route('profile')->with('toast_success', 'Password berhasil diubah.');
         } else {
             return redirect()->route('profile')->with('error', 'Password gagal diubah.');
         }

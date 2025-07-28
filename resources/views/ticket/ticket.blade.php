@@ -3,27 +3,41 @@
 @section('title', 'Ticket')
 
 @section('content')
-<div class="modal fade" id="modalNotification" tabindex="-1">
+<div class="modal fade" id="editModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <p class="modal-title" id="modalTitleNotify">A new experience, personalized for you.</p>
+                <p class="modal-title">Edit ticket.</p>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="py-3 text-center">
-                    <svg class="icon icon-xl text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
-                        </path>
-                    </svg>
-                    <h2 class="h4 modal-title my-3">Important message!</h2>
-                    <p>Do you know that you can assign status and relation to a company right in the visit list?</p>
-                </div>
+                <form action="" method="POST" id="editForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="form-group mb-3">
+                        <label for="deskripsi_pesanan">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4"
+                            required>{{old('deskripsi_pesanan')}}</textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="appointment_date">Appointment Date</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                            <input class="form-control" id="appointment_date" name="tanggal" type="text"
+                                placeholder="dd/mm/yyyy" autocomplete="off" value="{{old('tanggal')}}" required>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-primary">Go to Inbox</button>
+                <button type="submit" form="editForm" class="btn btn-sm btn-primary">Edit</button>
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -88,9 +102,11 @@
                                                 </path>
                                             </svg>
                                         </a>
-                                        @if ( $ticket->status != 2 && $ticket->progres != 3 && $ticket->progres != 4 && \Carbon\Carbon::now()->diffInHours($ticket->created_at) < 24)
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#modalNotification">
+                                        @if ($ticket->status != 2 && $ticket->progres != 3 && $ticket->progres != 4 && \Carbon\Carbon::now()->diffInHours($ticket->created_at) < 24)
+                                            <button type="button" class="btn btn-primary tombol-edit" data-bs-toggle="modal"
+                                                data-bs-target="#editModal" data-id="{{$ticket->kd_pesanan}}"
+                                                data-deskripsi="{{$ticket->deskripsi_pesanan}}"
+                                                data-tanggal="{{$ticket->tanggal}}">
                                                 <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,6 +142,25 @@
 
 @section('js')
 <script>
+    $('.tombol-edit').on('click', function () {
+        const id = $(this).data('id');
+        const deskripsi = $(this).data('deskripsi');
+        const tanggal = $(this).data('tanggal');
+
+        $('#deskripsi_pesanan').val(deskripsi);
+        $('#appointment_date').val(tanggal);
+
+        $('#editForm').attr('action', "{{route('ticket.edit', ':id')}}".replace(':id', id));
+    })
+    document.addEventListener("DOMContentLoaded", function () {
+        const datepickerEl = document.getElementById('appointment_date');
+        if (datepickerEl) {
+            new Datepicker(datepickerEl, {
+                format: 'dd/mm/yyyy',
+                autohide: true,
+            });
+        }
+    });
     function confirmCancel($ticket) {
         Swal.fire({
             title: 'Batalkan Pesanan?',
@@ -143,4 +178,6 @@
     }
 
 </script>
+
+@include('partials.toast')
 @endsection

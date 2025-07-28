@@ -53,6 +53,13 @@ class TicketController extends Controller
             return redirect()->back()->withErrors($validated)->withInput();
         }
 
+        $appointmentDate = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+        if ($appointmentDate->isPast() && !$appointmentDate->isToday()) {
+            return redirect()->back()
+                ->with('toast_error', 'Tanggal appointment tidak boleh kurang dari hari ini.')
+                ->withInput();
+        }
+
         $pesanan = Pesanan::create([
             'kd_pelanggan' => Auth::guard('pelanggan')->user()->kd_pelanggan,
             'deskripsi_pesanan' => $request->deskripsi_pesanan,
@@ -69,15 +76,34 @@ class TicketController extends Controller
         }
 
         if ($pesanan) {
-            return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibuat.');
+            return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil dibuat.');
         }
         return redirect()->route('ticket.create')->with('error', 'Pesanan gagal dibuat.');
     }
 
-    public function edit($id)
+    public function edit(Request $request, $ticket)
     {
-        $pesanan = Pesanan::find($id);
-        return view('ticket.edit', compact('pesanan'));
+        $validated = Validator::make($request->all(), [
+            'deskripsi_pesanan' => 'required|string',
+            'tanggal' => 'required|date_format:d/m/Y',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect()->back()->withErrors($validated)->withInput();
+        }
+
+        $appointmentDate = Carbon::createFromFormat('d/m/Y', $request->tanggal);
+        if ($appointmentDate->isPast() && !$appointmentDate->isToday()) {
+            return redirect()->back()
+                ->with('toast_error', 'Tanggal appointment tidak boleh kurang dari hari ini.')
+                ->withInput();
+        }
+
+        $pesanan = Pesanan::find($ticket);
+        $pesanan->deskripsi_pesanan = $request->deskripsi_pesanan;
+        $pesanan->tanggal = $request->tanggal;
+        $pesanan->save();
+        return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil diubah.');
     }
 
     public function cancel($ticket)
@@ -85,7 +111,7 @@ class TicketController extends Controller
         $pesanan = Pesanan::find($ticket);
         $pesanan->status = '2';
         $pesanan->save();
-        return redirect()->route('dashboard')->with('success', 'Pesanan berhasil dibatalkan.');
+        return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil dibatalkan.');
     }
 
 }
