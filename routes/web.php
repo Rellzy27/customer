@@ -26,15 +26,14 @@ Route::middleware(['can:auth'])->group(function () {
     //     return view('dashboard');
     // })->name('dashboard');
     Route::get('/dashboard', [App\Http\Controllers\TicketController::class, 'index'])->name('dashboard');
-    Route::get('/ticket/create', [App\Http\Controllers\TicketController::class, 'create'])->name('ticket.create');
-    Route::post('/ticket', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
-
+    Route::get('/pesanan/create', [App\Http\Controllers\TicketController::class, 'create'])->name('ticket.create');
+    Route::post('/pesanan', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
 }); 
 
 Route::middleware(['can:auth', TicketOwnership::class])->group(function () {
-    Route::get('/ticket/{ticket}/detail', [App\Http\Controllers\TicketController::class, 'detail'])->name('ticket.detail');
-    Route::put('/ticket/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('ticket.edit');
-    Route::get('/ticket/{ticket}/cancel', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
+    Route::get('/pesanan/{ticket}/detail', [App\Http\Controllers\TicketController::class, 'detail'])->name('ticket.detail');
+    Route::put('/pesanan/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('ticket.edit');
+    Route::get('/pesanan/{ticket}/cancel', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
 });
 
 require __DIR__ . '/auth.php';

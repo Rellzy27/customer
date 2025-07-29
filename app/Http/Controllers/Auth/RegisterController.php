@@ -68,13 +68,13 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
         
-        event(new Registered($user));
+        // event(new Registered($user));
 
         $this->guard()->login($user);
 
-        return $request->wantsJson()
-                    ? new JsonResponse([], 201)
-                    : redirect()->route('verification.notice');
+        // return $request->wantsJson()
+        //             ? new JsonResponse([], 201)
+        //             : redirect()->route('verification.notice');
 
     }
 }

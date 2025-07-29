@@ -73,7 +73,7 @@
     <div class="card-body">
         <div class="ticket-progress">
             @php
-                $statuses = ['Ticket Created', 'Ticket Received', 'In Progress', 'Done'];
+                $statuses = ['Pesanan Dibuat', 'Pesanan Diterima', 'Pesanan Diproses', 'Selesai'];
             @endphp
             <ul>
                 @if ($pesanan->status == 2)
@@ -93,16 +93,18 @@
                         <div class="step-label">{{ $status }}</div>
                         <div class="step-info">
                             @switch($status)
-                                @case('Ticket Created')
-                                    Pesanan telah dibuat.
+                                @case('Pesanan Dibuat')
+                                    Pesanan telah dibuat oleh @if ($pesanan->kd_karyawan == null) Pelanggan @else Staff @endif pada tanggal {{ $pesanan->created_at->format('d M Y') }}
                                     @break
-                                @case('Ticket Received')
-                                    Pesanan telah diterima.
+                                @case('Pesanan Diterima')
+                                    @if ($pesanan->progres == 2) Pesanan telah diterima oleh Petugas pada tanggal {{ $pesanan->updated_at->format('d M Y') }}.
+                                    @else Pesanan telah diterima.
+                                    @endif
                                     @break
-                                @case('In Progress')
-                                    Pesanan sedang diproses.
+                                @case('Pesanan Diproses')
+                                    Pesanan sedang diproses, <a href="{{ route('ticket.edit', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
                                     @break
-                                @case('Done')
+                                @case('Selesai')
                                     Pesanan telah selesai.
                                     @break
                             @endswitch

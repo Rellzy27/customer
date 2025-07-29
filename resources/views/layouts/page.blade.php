@@ -57,6 +57,10 @@ Software. Please contact us to request a removal.
     <link type="text/css" href="{{ asset('volt/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
     <link type="text/css" href="{{ asset('volt/vendor/notyf/notyf.min.css') }}" rel="stylesheet">
     <link type="text/css" href="{{ asset('volt/css/volt.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
     @yield('css')
 
@@ -65,8 +69,8 @@ Software. Please contact us to request a removal.
 <body>
     <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
         <a class="navbar-brand me-lg-5" href="/">
-            <img class="navbar-brand-dark" src="{{ asset('volt/assets/img/brand/light.svg') }}" alt="Volt logo" /> <img
-                class="navbar-brand-light" src="{{ asset('volt/assets/img/brand/dark.svg') }}" alt="Volt logo" />
+            <img class="navbar-brand-dark" src="{{ asset('logo.png') }}" alt="Inspizo Logo" /> <img
+                class="navbar-brand-light" src="{{ asset('logo.png') }}" alt="Inspizo Logo" />
         </a>
         <div class="d-flex align-items-center">
             <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
@@ -81,11 +85,10 @@ Software. Please contact us to request a removal.
         <div class="sidebar-inner px-4 pt-3">
             <div class="user-card d-flex align-items-center justify-content-between justify-content-md-center pb-4">
                 <a href="/" class="nav-link d-flex align-items-center">
-                    <span class="sidebar-icon h3">
-                        <img src="{{ asset('volt/assets/img/brand/light.svg') }}" height="20" width="20"
-                            alt="Volt Logo">
+                    <span class="sidebar-icon">
+                        <img src="{{ asset('logo.png') }}" style="max-height: 100%; width: auto;"
+                            alt="Inspizo Logo">
                     </span>
-                    <span class="mt-1 ms-1 h3">Inspizo</span>
                 </a>
                 <div class="collapse-close d-md-none">
                     <a href="#sidebarMenu" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
@@ -113,7 +116,7 @@ Software. Please contact us to request a removal.
                         <span class="sidebar-text">Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item {{ Request::is('ticket/create*') ? 'active' : '' }}">
+                <li class="nav-item {{ Request::is('pesanan/create*') ? 'active' : '' }}">
                     <a href="{{ route('ticket.create') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
@@ -124,7 +127,19 @@ Software. Please contact us to request a removal.
                                     clip-rule="evenodd"></path>
                             </svg>
                         </span>
-                        <span class="sidebar-text">Create Ticket</span>
+                        <span class="sidebar-text">Buat Pesanan</span>
+                    </a>
+                </li>
+                <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+                <li class="nav-item {{ Request::is('profile*') ? 'active' : '' }}">
+                    <a href="{{ route('profile') }}" class="nav-link">
+                        <span class="sidebar-icon">
+                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"></path>
+                            </svg>
+                        </span>
+                        <span class="sidebar-text">Profile</span>
                     </a>
                 </li>
                 <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
@@ -170,7 +185,7 @@ Software. Please contact us to request a removal.
     <script src="{{ asset('volt/vendor/simplebar/dist/simplebar.min.js') }}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="{{ asset('volt/assets/js/volt.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     @yield('js')
 

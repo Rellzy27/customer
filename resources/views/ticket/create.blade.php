@@ -1,13 +1,13 @@
 @extends('layouts.page')
 
-@section('title', 'Create Ticket')
+@section('title', 'Buat Pesanan')
 
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="card mt-4">
             <div class="card-header">
-                <h3 class="card-title">Create Ticket</h3>
+                <h3 class="card-title">Buat Pesanan</h3>
             </div>
             <div class="card-body">
                 <form action="{{ route('ticket.store') }}" method="POST">
@@ -23,7 +23,7 @@
                             required></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="appointment_date">Appointment Date</label>
+                        <label for="appointment_date">Tanggal Janji Temu</label>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
@@ -37,7 +37,7 @@
                                 placeholder="dd/mm/yyyy" autocomplete="off" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Kirim</button>
                 </form>
             </div>
         </div>

@@ -32,8 +32,8 @@
         <div class="row justify-content-center">
             <div
                 class="col-12 col-lg-6 order-2 order-lg-1 text-center d-flex align-items-center justify-content-center d-none d-lg-block mt-5">
-                <img class="img-fluid w-75" src="{{ asset('volt/assets/img/illustrations/sign_up.svg')}}"
-                    alt="Login Illustration">
+                <img class="img-fluid w-75" src="{{ asset('volt/assets/img/illustrations/Sign_up.svg')}}"
+                    alt="Register Illustration">
             </div>
             <div class="col-12 col-lg-6 order-1 order-lg-2">
                 <div class="bg-white shadow border-0 rounded border-light p-4 p-lg-5 w-100" style="max-width: 600px;">

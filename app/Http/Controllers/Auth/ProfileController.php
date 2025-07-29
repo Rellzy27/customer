@@ -46,14 +46,14 @@ class ProfileController extends Controller
             $user->save();
 
             return response()->json([
-                'toast_success' => 'Foto sukses diupload.',
+                'success' => 'Foto sukses diupload.',
                 'path' => Storage::url($path)
             ]);
         }
 
         $validator = Validator::make($request->all(), [
             'nama_pelanggan' => 'required|string|max:255',
-            'username' => ['required', 'string', 'max:255', Rule::unique('karyawan')->ignore($user->kd_karyawan, 'kd_karyawan')],
+            'username' => ['required', 'string', 'max:255', Rule::unique('pelanggans')->ignore($user->id_pelanggan, 'id_pelanggan')],
             'nama_perusahaan' => 'nullable|string|max:255',
             'nik' => 'nullable|string|max:255',
             'alamat_pelanggan' => 'nullable|string|max:255',
@@ -63,10 +63,10 @@ class ProfileController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        $user->update($request->all());
+        $user->update($request->except('_token'));
 
         return response()->json([
-            'toast_success' => 'Profil sukses diupdate!',
+            'success' => 'Profil sukses diupdate!',
             'user' => $user->fresh()
         ]);
     }
@@ -76,25 +76,27 @@ class ProfileController extends Controller
         $user = Auth::guard('pelanggan')->user();
 
         $validator = Validator::make($request->all(), [
-            'password_lama' => 'required|string|min:8',
-            'password' => 'required|string|min:8|confirmed',
+            'password_lama' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:8', 'confirmed', 'different:password_lama'],
+        ], [
+            'password.different' => 'Password baru harus berbeda dari password lama.',
         ]);
 
-        if (!Hash::check($request->password_lama, $user->password)) {
-            $validator->errors()->add('password_lama', 'Password lama salah.');
-        }
+        $validator->after(function ($validator) use ($request, $user) {
+            if (!Hash::check($request->password_lama, $user->password)) {
+                $validator->errors()->add(
+                    'password_lama', 'Password lama yang Anda masukkan salah.'
+                );
+            }
+        });
 
         if ($validator->fails()) {
-            return redirect()->route('profile')->with('errors', $validator->errors());
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
         $user->password = Hash::make($request->password);
         $user->save();
 
-        if ($user->wasChanged()) {
-            return redirect()->route('profile')->with('toast_success', 'Password berhasil diubah.');
-        } else {
-            return redirect()->route('profile')->with('error', 'Password gagal diubah.');
-        }
+        return redirect()->route('profile')->with('toast_success', 'Password berhasil diubah.');
     }
 }

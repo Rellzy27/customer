@@ -1,6 +1,6 @@
 @extends('layouts.page')
 
-@section('title', 'Ticket')
+@section('title', 'Pesanan')
 
 @section('content')
 <div class="modal fade" id="editModal" tabindex="-1">
@@ -20,7 +20,7 @@
                             required>{{old('deskripsi_pesanan')}}</textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="appointment_date">Appointment Date</label>
+                        <label for="appointment_date">Tanggal Janji Temu</label>
                         <div class="input-group">
                             <span class="input-group-text">
                                 <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
@@ -38,7 +38,7 @@
             </div>
             <div class="modal-footer">
                 <button type="submit" form="editForm" class="btn btn-sm btn-primary">Edit</button>
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
                             <path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
-                        Create Ticket
+                        Buat Pesanan
                     </a>
                 </div>
             </div>
@@ -66,9 +66,9 @@
                             <tr class="text-center">
                                 <th width="5%">No</th>
                                 <th>Deskripsi</th>
-                                <th width="15%">Appointment Date</th>
+                                <th width="15%">Tanggal Janji Temu</th>
                                 <th width="15%">Status</th>
-                                <th width="15%">Action</th>
+                                <th width="15%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,13 +79,13 @@
                                     <td>{{$ticket->tanggal}}</td>
                                     <td class="text-center">
                                         @if ($ticket->status == 1)
-                                            <span class="badge bg-success">Done</span>
+                                            <span class="badge bg-success">Selesai</span>
                                         @elseif ($ticket->status == 0 && $ticket->progres == 1)
-                                            <span class="badge bg-info">Ticket Created</span>
+                                            <span class="badge bg-info">Pesanan Dibuat</span>
                                         @elseif ($ticket->status == 0 && $ticket->progres == 2)
-                                            <span class="badge bg-warning">Ticket Recieved</span>
+                                            <span class="badge bg-warning">Pesanan Diterima</span>
                                         @elseif ($ticket->status == 0 && $ticket->progres == 3)
-                                            <span class="badge bg-secondary">In Progress</span>
+                                            <span class="badge bg-secondary">Pesanan Diproses</span>
                                         @elseif ($ticket->status == 2)
                                             <span class="badge bg-danger">Batal</span>
                                         @endif
