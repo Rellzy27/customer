@@ -18,7 +18,9 @@ Route::get('register', [App\Http\Controllers\Auth\RegisterController::class, 'sh
 Route::post('register', [App\Http\Controllers\Auth\RegisterController::class, 'register']);
 
 Route::get('/profile', [App\Http\Controllers\Auth\ProfileController::class, 'index'])->name('profile');
-Route::post('/profile/update', [App\Http\Controllers\Auth\ProfileController::class, 'update'])->name('profile.update');
+Route::post('/profile/update-personal', [App\Http\Controllers\Auth\ProfileController::class, 'updatePersonal'])->name('profile.update.personal');
+Route::post('/profile/update-kontak', [App\Http\Controllers\Auth\ProfileController::class, 'updateKontak'])->name('profile.update.kontak');
+Route::post('/profile/update-photo', [App\Http\Controllers\Auth\ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
 
 Route::get('/email/verify', function () {
     return view('auth.verify-email');

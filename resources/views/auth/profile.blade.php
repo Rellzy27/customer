@@ -50,6 +50,12 @@
         border: 0;
         box-shadow: none;
         padding-left: 0;
+        cursor: default;
+    }
+    
+    .form-control:not([readonly]) {
+        background-color: #fff;
+        border: 1px solid #ced4da;
     }
 
     .toggle-password-icon {
@@ -65,36 +71,34 @@
             <div class="card-header">
                 <h3 class="card-title">Informasi Personal</h3>
                 <div class="card-tools">
-                    <button type="button" id="tombol-edit" class="btn btn-sm btn-warning">Edit</button>
-                    <button type="submit" form="profile-update-form" id="tombol-simpan" class="btn btn-sm btn-success"
-                        style="display: none;">Simpan</button>
-                    <button type="button" id="tombol-batal" class="btn btn-sm btn-secondary"
-                        style="display: none;">Batal</button>
+                    <button type="button" id="tombol-edit-personal" class="btn btn-sm btn-warning">Edit</button>
+                    <button type="submit" form="personal-update-form" id="tombol-simpan-personal" class="btn btn-sm btn-success" style="display: none;">Simpan</button>
+                    <button type="button" id="tombol-batal-personal" class="btn btn-sm btn-secondary" style="display: none;">Batal</button>
                 </div>
             </div>
             <div class="card-body">
-                <form id="profile-update-form" action="{{ route('profile.update') }}" method="POST">
+                <form id="personal-update-form" action="{{ route('profile.update.personal') }}" method="POST">
                     @csrf
                     <div class="row">
                         <div class="col-md-6 form-group mb-3">
                             <label>Nama Lengkap</label>
-                            <input type="text" class="form-control" name="nama_pelanggan"
-                                value="{{ $user->nama_pelanggan ?? '-' }}" readonly>
+                            <input type="text" class="form-control" name="nama_pelanggan" value="{{ $user->nama_pelanggan ?? '-' }}" readonly>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label>Nama Perusahaan <sub class="text-muted">(Opsional)</sub></label>
+                            <input type="text" class="form-control" name="nama_perusahaan" value="{{ $user->nama_perusahaan ?? '-' }}" readonly>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label>Username</label>
-                            <input type="text" class="form-control" name="username" value="{{ $user->username ?? '-' }}"
-                                readonly>
+                            <input type="text" class="form-control" name="username" value="{{ $user->username ?? '-' }}" readonly>
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label>NIK <sub class="text-muted">(Opsional)</sub></label>
+                            <input type="text" class="form-control" name="nik" value="{{ $user->nik ?? '-' }}" readonly>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label>Alamat</label>
-                            <input type="text" class="form-control" name="alamat_pelanggan"
-                                value="{{ $user->alamat_pelanggan ?? '-' }}" readonly>
-                        </div>
-                        <div class="col-md-6 form-group mb-3">
-                            <label>Nama Perusahaan</label>
-                            <input type="text" class="form-control" name="nama_perusahaan"
-                                value="{{ $user->nama_perusahaan ?? '-' }}" readonly>
+                            <input type="text" class="form-control" name="alamat_pelanggan" value="{{ $user->alamat_pelanggan ?? '-' }}" readonly>
                         </div>
                     </div>
                 </form>
@@ -108,31 +112,29 @@
             <div class="card-body">
                 <form action="{{ route('ganti-password') }}" method="POST">
                     @csrf
-                    <div class="col-md-4 form-group mb-3">
-                        <label>Password Lama</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control @error('password_lama') is-invalid @enderror"
-                                name="password_lama" required>
-                            <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                        <div class="col-md-4 form-group mb-3">
+                            <label>Password Lama</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control @error('password_lama') is-invalid @enderror" name="password_lama" required autocomplete="current-password">
+                                <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                            </div>
+                            @error('password_lama')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
                         </div>
-                        @error('password_lama')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="col-md-4 form-group mb-3">
-                        <label>Password Baru</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                name="password" required>
-                            <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                        <div class="col-md-4 form-group mb-3">
+                            <label>Password Baru</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                                <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                            </div>
+                            @error('password')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
                         </div>
-                        @error('password')<span class="invalid-feedback d-block">{{ $message }}</span>@enderror
-                    </div>
-                    <div class="col-md-4 form-group mb-3">
-                        <label>Konfirmasi Password Baru</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" name="password_confirmation" required>
-                            <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                        <div class="col-md-4 form-group mb-3">
+                            <label>Konfirmasi Password Baru</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                <span class="input-group-text toggle-password-icon"><i class="fas fa-eye"></i></span>
+                            </div>
                         </div>
-                    </div>
                     <div class="form-group mt-3">
                         <button type="submit" class="btn btn-primary">Ganti Password</button>
                     </div>
@@ -145,15 +147,12 @@
         <div class="card col-md-12 mt-3 mb-3 card-primary card-outline">
             <div class="card-body box-profile">
                 <div class="text-center">
-                    <form id="photo-upload-form" action="{{ route('profile.update') }}" method="POST"
-                        enctype="multipart/form-data" class="d-none">
+                    <form id="photo-upload-form" action="{{ route('profile.update.photo') }}" method="POST" enctype="multipart/form-data" class="d-none">
                         @csrf
                         <input type="file" name="foto" id="foto-upload" accept="image/*">
                     </form>
                     <div class="profile-pic-container" id="profile-pic-trigger">
-                        <img class="profile-user-img img-fluid rounded-circle" id="profile-pic-preview"
-                            src="{{ $user->foto ? Storage::url($user->foto) : asset('default.png') }}"
-                            alt="User profile picture">
+                        <img class="profile-user-img img-fluid rounded-circle" id="profile-pic-preview" src="{{ $user->foto ? Storage::url($user->foto) : asset('default.png') }}" alt="User profile picture">
                         <div class="upload-overlay">
                             <i class="fas fa-camera"></i>
                             <span>Ganti Foto</span>
@@ -164,20 +163,28 @@
                 <p class="text-muted text-center" style="font-size: 0.9rem;">{{ $user->alamat_pelanggan }}</p>
             </div>
         </div>
+        
         <div class="card mt-3 mb-3">
             <div class="card-header">
                 <h3 class="card-title">Kontak</h3>
+                <div class="card-tools">
+                    <button type="button" id="tombol-edit-kontak" class="btn btn-sm btn-warning">Edit</button>
+                    <button type="submit" form="kontak-update-form" id="tombol-simpan-kontak" class="btn btn-sm btn-success" style="display: none;">Simpan</button>
+                    <button type="button" id="tombol-batal-kontak" class="btn btn-sm btn-secondary" style="display: none;">Batal</button>
+                </div>
             </div>
             <div class="card-body">
-                <div class="form-group mb-3">
-                    <label>Email</label>
-                    <input type="email" class="form-control" name="email" value="{{ $user->email }}" readonly>
-                </div>
-                <div class="form-group mb-3">
-                    <label>Nomor Telepon</label>
-                    <input type="text" class="form-control" name="telp" value="{{ $user->telp_pelanggan ?? '-' }}"
-                        readonly>
-                </div>
+                <form id="kontak-update-form" action="{{ route('profile.update.kontak') }}" method="POST">
+                    @csrf
+                    <div class="form-group mb-3">
+                        <label>Email</label>
+                        <input type="email" class="form-control" name="email" value="{{ $user->email }}" readonly>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Nomor Telepon</label>
+                        <input type="text" class="form-control" name="telp_pelanggan" value="{{ $user->telp_pelanggan ?? '-' }}" readonly>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -191,31 +198,74 @@
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
         });
 
-        const formInputs = $('#profile-update-form input');
+        setupEditToggle(
+            '#tombol-edit-personal', 
+            '#tombol-simpan-personal', 
+            '#tombol-batal-personal', 
+            '#personal-update-form'
+        );
+        setupFormSubmission('#personal-update-form', 'Informasi personal berhasil diperbarui.');
 
-        $('#tombol-edit').on('click', function () {
-            toggleEditMode(true);
-        });
+        setupEditToggle(
+            '#tombol-edit-kontak', 
+            '#tombol-simpan-kontak', 
+            '#tombol-batal-kontak', 
+            '#kontak-update-form'
+        );
+        setupFormSubmission('#kontak-update-form', 'Informasi kontak berhasil diperbarui.');
 
-        $('#tombol-batal').on('click', function () {
-            location.reload();
-        });
 
-        $('#profile-update-form').on('submit', function (e) {
-            e.preventDefault();
-            saveProfileData();
-        });
+        function setupEditToggle(editBtn, saveBtn, cancelBtn, formId) {
+            const formInputs = $(formId + ' input');
+            const originalValues = {};
 
-        function toggleEditMode(enable) {
-            if (enable) {
-                formInputs.removeAttr('readonly');
-                $('#tombol-edit').hide();
-                $('#tombol-simpan, #tombol-batal').show();
-            } else {
-                formInputs.attr('readonly', true);
-                $('#tombol-edit').show();
-                $('#tombol-simpan, #tombol-batal').hide();
-            }
+            $(editBtn).on('click', function () {
+                formInputs.each(function() {
+                    originalValues[$(this).attr('name')] = $(this).val();
+                });
+                
+                formInputs.removeAttr('readonly').removeClass('form-control-plaintext');
+                $(editBtn).hide();
+                $(saveBtn + ', ' + cancelBtn).show();
+            });
+
+            $(cancelBtn).on('click', function () {
+                formInputs.each(function() {
+                    $(this).val(originalValues[$(this).attr('name')]);
+                });
+
+                formInputs.attr('readonly', true).addClass('form-control-plaintext');
+                $(editBtn).show();
+                $(saveBtn + ', ' + cancelBtn).hide();
+            });
+        }
+
+        function setupFormSubmission(formId, successMessage) {
+            $(formId).on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        Swal.fire({
+                            title: 'Sukses!',
+                            text: successMessage,
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function (xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMsg = 'Update gagal, silahkan periksa kembali data Anda.';
+                        if (errors) {
+                            errorMsg = Object.values(errors).map(e => e[0]).join('<br>');
+                        }
+                        Swal.fire('Error', errorMsg, 'error');
+                    }
+                });
+            });
         }
 
         $('.toggle-password-icon').on('click', function () {
@@ -226,47 +276,21 @@
             icon.toggleClass('fa-eye fa-eye-slash');
         });
 
-        function saveProfileData() {
-            $.ajax({
-                url: "{{ route('profile.update') }}",
-                type: 'POST',
-                data: $('#profile-update-form').serialize(),
-                success: function (response) {
-                    Swal.fire({
-                        title: 'Sukses!',
-                        text: response.success,
-                        icon: 'success'
-                    }).then(() => {
-                        location.reload();
-                    });
-                },
-                error: function (xhr) {
-                    let errors = xhr.responseJSON.errors;
-                    let errorMsg = 'Update gagal, silahkan coba lagi atau hubungi admin.';
-                    if (errors) {
-                        errorMsg = Object.values(errors).map(e => e[0]).join('<br>');
-                    }
-                    Swal.fire('Error', errorMsg, 'error');
-                }
-            });
-        }
-
         $('#profile-pic-trigger').on('click', function () {
             $('#foto-upload').click();
         });
 
         $('#foto-upload').on('change', function () {
             let formData = new FormData($('#photo-upload-form')[0]);
-
             $.ajax({
-                url: "{{ route('profile.update') }}",
+                url: "{{ route('profile.update.photo') }}",
                 type: 'POST',
                 data: formData,
                 contentType: false,
                 processData: false,
                 success: function (response) {
                     Swal.fire({
-                        title: 'Success!',
+                        title: 'Sukses!',
                         text: response.success,
                         icon: 'success'
                     }).then(() => {

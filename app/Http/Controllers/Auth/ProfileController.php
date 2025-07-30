@@ -24,7 +24,7 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(Request $request)
+    public function updatePhoto(Request $request)
     {
         $user = Auth::guard('pelanggan')->user();
 
@@ -51,9 +51,15 @@ class ProfileController extends Controller
             ]);
         }
 
+    }
+
+    public function updatePersonal(Request $request)
+    {
+        $user = Auth::guard('pelanggan')->user();
+
         $validator = Validator::make($request->all(), [
             'nama_pelanggan' => 'required|string|max:255',
-            'username' => ['required', 'string', 'max:255', Rule::unique('pelanggans')->ignore($user->id_pelanggan, 'id_pelanggan')],
+            'username' => ['required', 'string', 'max:255', Rule::unique('pelanggan')->ignore($user->kd_pelanggan, 'kd_pelanggan')],
             'nama_perusahaan' => 'nullable|string|max:255',
             'nik' => 'nullable|string|max:255',
             'alamat_pelanggan' => 'nullable|string|max:255',
@@ -71,6 +77,31 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function updateKontak(Request $request)
+    {
+        $user = Auth::guard('pelanggan')->user();
+
+        $validatedData = $request->validate([
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('pelanggan')->ignore($user->kd_pelanggan, 'kd_pelanggan'),
+            ],
+            'telp_pelanggan' => [
+                'nullable',
+                'string',
+                'max:20',
+                Rule::unique('pelanggan')->ignore($user->kd_pelanggan, 'kd_pelanggan'),
+            ],
+        ]);
+
+        $user->update($validatedData);
+
+        return response()->json(['success' => 'Informasi kontak berhasil diperbarui.']);
+    }
+
     public function updatePassword(Request $request)
     {
         $user = Auth::guard('pelanggan')->user();
@@ -86,7 +117,8 @@ class ProfileController extends Controller
         $validator->after(function ($validator) use ($request, $user) {
             if (!Hash::check($request->password_lama, $user->password)) {
                 $validator->errors()->add(
-                    'password_lama', 'Password lama yang Anda masukkan salah.'
+                    'password_lama',
+                    'Password lama yang Anda masukkan salah.'
                 );
             }
         });
