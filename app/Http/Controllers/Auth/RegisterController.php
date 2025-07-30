@@ -34,28 +34,32 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
-    
+
     public function register(Request $request)
     {
-            $validatedData = Validator::make($request->all(), [
-                'nama_pelanggan' => ['required', 'string', 'max:255'],
-                'nama_perusahaan' => ['nullable', 'string', 'max:255'],
-                'alamat_pelanggan' => ['nullable', 'string', 'max:255'],
-                'telp_pelanggan' => ['nullable', 'string', 'max:255', 'unique:pelanggan'],
-                'username' => ['required', 'string', 'max:255', 'unique:pelanggan'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:pelanggan'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ], [
-                'telp_pelanggan.unique' => 'Nomor telepon sudah terdaftar.',
-                'username.unique' => 'Username sudah terdaftar.',
-                'email.unique' => 'Email sudah terdaftar.',
-                'password.min' => 'Password minimal 8 karakter.',
-                'password.confirmed' => 'Password tidak cocok.',
-            ]);
+        $validator = Validator::make($request->all(), [
+            'nama_pelanggan' => ['required', 'string', 'max:255'],
+            'nama_perusahaan' => ['nullable', 'string', 'max:255'],
+            'alamat_pelanggan' => ['nullable', 'string', 'max:255'],
+            'telp_pelanggan' => ['nullable', 'string', 'max:255', 'unique:pelanggan'],
+            'username' => ['required', 'string', 'max:255', 'unique:pelanggan'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:pelanggan'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'telp_pelanggan.unique' => 'Nomor telepon sudah terdaftar.',
+            'username.unique' => 'Username sudah terdaftar.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Password tidak cocok.',
+            'email.email' => 'Format email salah.',
+            'username.required' => 'Username harus diisi.',
+            'email.required' => 'Email harus diisi.',
+            'password.required' => 'Password harus diisi.',
+        ]);
 
-            if ($validatedData->fails()) {
-                return redirect()->back()->withErrors($validatedData)->withInput();
-            }
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
 
         $user = Pelanggan::create([
@@ -67,7 +71,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        
+
         // event(new Registered($user));
 
         $this->guard()->login($user);

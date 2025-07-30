@@ -72,6 +72,17 @@ class LoginController extends Controller
         return $field;
     }
 
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = ['login' => 'Invalid username or password.'];
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+
+        return redirect()->back()->withErrors($errors)->withInput($request->only($this->username(), 'remember'));
+    }
+
     /**
      * The user has been authenticated.
      *

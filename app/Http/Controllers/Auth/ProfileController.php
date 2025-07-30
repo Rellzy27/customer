@@ -80,6 +80,7 @@ class ProfileController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed', 'different:password_lama'],
         ], [
             'password.different' => 'Password baru harus berbeda dari password lama.',
+            'password.min' => 'Password minimal 8 karakter.',
         ]);
 
         $validator->after(function ($validator) use ($request, $user) {

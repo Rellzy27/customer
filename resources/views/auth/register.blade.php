@@ -45,7 +45,7 @@
                         <fieldset class="form-step active" data-step="1">
                             <h5 class="mb-4">Informasi Akun</h5>
                             <div class="row">
-                                <div class="form-group mb-4 col-md-6">
+                                <div class="form-group mb-{{ $errors->has('nama_pelanggan') ? '1' : '4' }} col-md-6">
                                     <label for="nama_pelanggan">Nama Lengkap</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
@@ -58,7 +58,7 @@
                                             autofocus>
                                     </div>
                                     @error('nama_pelanggan')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -91,7 +91,7 @@
                                             name="alamat_pelanggan" value="{{ old('alamat_pelanggan') }}" required>
                                     </div>
                                     @error('alamat_pelanggan')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -110,7 +110,7 @@
                                             name="telp_pelanggan" value="{{ old('telp_pelanggan') }}" required>
                                     </div>
                                     @error('telp_pelanggan')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -124,7 +124,7 @@
                         <fieldset class="form-step" data-step="2">
                             <h5 class="mb-4">Detail Akun</h5>
                             <div class="row">
-                                <div class="form-group mb-4 col-md-6">
+                                <div class="form-group mb-{{ $errors->has('username') ? '1' : '4' }} col-md-6">
                                     <label for="username">Username</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
@@ -136,12 +136,12 @@
                                             value="{{ old('username') }}" required>
                                     </div>
                                     @error('username')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="form-group mb-4 col-md-6">
+                                <div class="form-group mb-{{ $errors->has('email') ? '1' : '4' }} col-md-6">
                                     <label for="email">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
@@ -157,13 +157,13 @@
                                             value="{{ old('email') }}" required>
                                     </div>
                                     @error('email')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-4 col-md-12">
-                                    <label for="password">Kata Sandi</label>
+                                    <label for="password">Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
                                                 viewBox="0 0 20 20">
@@ -171,18 +171,18 @@
                                                     d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
                                                     clip-rule="evenodd"></path>
                                             </svg></span>
-                                        <input id="password" type="password" placeholder="Kata Sandi"
+                                        <input id="password" type="password" placeholder="Password"
                                             class="form-control @error('password') is-invalid @enderror" name="password"
                                             required>
                                     </div>
                                     @error('password')
-                                        <span class="invalid-feedback">
+                                        <span class="invalid-feedback d-block">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                                 <div class="form-group mb-4 col-md-12">
-                                    <label for="password_confirmation">Konfirmasi Kata Sandi</label>
+                                    <label for="password_confirmation">Konfirmasi Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><svg class="icon icon-xs" fill="currentColor"
                                                 viewBox="0 0 20 20">
@@ -191,7 +191,7 @@
                                                     clip-rule="evenodd"></path>
                                             </svg></span>
                                         <input id="password_confirmation" type="password"
-                                            placeholder="Konfirmasi Kata Sandi" class="form-control"
+                                            placeholder="Konfirmasi Password" class="form-control"
                                             name="password_confirmation" required>
                                     </div>
                                 </div>
@@ -226,14 +226,17 @@
             const nextStepElement = currentStep.next('.form-step');
             let isValid = true;
 
-            // Find all required inputs in the current step
             currentStep.find('input[required]').each(function () {
-                // If the input is empty...
                 if ($(this).val().trim() === '') {
-                    isValid = false; // Mark form as invalid
-                    $(this).addClass('is-invalid'); // Show Bootstrap's invalid feedback
+                    isValid = false;
+                    $(this).addClass('is-invalid');
+                    $(this).next('.invalid-feedback').remove();
+                    $(this).closest('.form-group').addClass('mb-1').removeClass('mb-4');
+                    $(this).after('<span class="invalid-feedback d-block"><strong>Field wajib diisi</strong></span>');
                 } else {
                     $(this).removeClass('is-invalid');
+                    $(this).closest('.form-group').addClass('mb-4').removeClass('mb-1');
+                    $(this).next('.invalid-feedback').remove();
                 }
             });
 
