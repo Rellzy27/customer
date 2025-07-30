@@ -34,6 +34,7 @@ Route::middleware(['can:auth', TicketOwnership::class])->group(function () {
     Route::get('/pesanan/{ticket}/detail', [App\Http\Controllers\TicketController::class, 'detail'])->name('ticket.detail');
     Route::put('/pesanan/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('ticket.edit');
     Route::get('/pesanan/{ticket}/cancel', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
+    Route::get('/pesanan/{ticket}/progress', [App\Http\Controllers\TicketController::class, 'progress'])->name('ticket.progress');
 });
 
 require __DIR__ . '/auth.php';

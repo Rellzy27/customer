@@ -6,6 +6,7 @@ use App\Models\Barang;
 use App\Models\Pesanan;
 use App\Models\Pesanan_Detail;
 use App\Models\Pesanan_Jasa;
+use App\Models\Pesanan_Progress;
 use App\Models\PesananBarang;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -42,6 +43,14 @@ class TicketController extends Controller
 
         return view('ticket.detail', compact('pesanan', 'pesanan_barang', 'pesanan_jasa'));
     }
+
+    public function progress($ticket)
+    {
+        $pesanan = Pesanan::find($ticket);
+        $progress = Pesanan_Progress::where('kd_pesanan', $pesanan->kd_pesanan)->get();
+        return view('ticket.progress', compact('pesanan', 'progress'));
+    }
+
     public function store(Request $request)
     {
         $validated = Validator::make($request->all(), [

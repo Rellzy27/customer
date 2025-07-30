@@ -1,67 +1,76 @@
 @extends('layouts.page')
 
-@section('title', 'Detail Ticket')
+@section('title', 'Detail Pesanan')
 
 @section('css')
 <style>
     .ticket-progress ul {
-    list-style-type: none;
-    padding-left: 0;
-    position: relative;
-}
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        position: relative;
+    }
 
-.ticket-progress li {
-    padding-left: 40px;
-    position: relative;
-    padding-bottom: 20px;
-}
+    .ticket-progress li {
+        flex: 1;
+        position: relative;
+        text-align: center;
+        padding-top: 40px;
+    }
 
-.ticket-progress li::before {
-    content: '';
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: #ccc;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
-}
+    .ticket-progress li::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ccc;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+    }
 
-.ticket-progress li::after {
-    content: '';
-    width: 2px;
-    height: 100%;
-    background-color: #ccc;
-    position: absolute;
-    left: 9px;
-    top: 0;
-}
+    .ticket-progress li::after {
+        content: '';
+        width: 100%;
+        height: 2px;
+        background-color: #ccc;
+        position: absolute;
+        top: 9px;
+        left: -50%;
+        z-index: 1;
+    }
 
-.ticket-progress li.completed::before {
-    background-color: #28a745; 
-}
+    .ticket-progress li:first-child::after {
+        content: none;
+    }
 
-.ticket-progress li.active::before {
-    background-color: #007bff; 
-}
+    .ticket-progress li.completed::before {
+        background-color: #28a745;
+    }
 
-.ticket-progress li.completed::after {
-    background-color: #28a745;
-}
+    .ticket-progress li.completed::after {
+        background-color: #28a745;
+    }
 
-.ticket-progress li:last-child::after {
-    display: none;
-}
+    .ticket-progress li.active::before {
+        background-color: #007bff;
+    }
 
-.step-label {
-    font-weight: bold;
-}
+    .ticket-progress li.active::after {
+        background-color: #007bff;
+    }
 
-.step-info {
-    font-size: 0.9em;
-    color: #666;
-}
+    .step-label {
+        font-weight: bold;
+    }
+
+    .step-info {
+        font-size: 0.9em;
+        color: #666;
+        padding: 5px 10px;
+    }
 </style>
 @endsection
 
@@ -94,15 +103,15 @@
                         <div class="step-info">
                             @switch($status)
                                 @case('Pesanan Dibuat')
-                                    Pesanan telah dibuat oleh @if ($pesanan->kd_karyawan == null) Pelanggan @else Staff @endif pada tanggal {{ $pesanan->created_at->format('d M Y') }}
+                                    Pesanan telah dibuat oleh @if ($pesanan->kd_karyawan == null) {{$pesanan->dibuat_oleh}} @else Staff @endif pada tanggal {{ $pesanan->created_at->format('d M Y') }}
                                     @break
                                 @case('Pesanan Diterima')
-                                    @if ($pesanan->progres == 2) Pesanan telah diterima oleh Petugas pada tanggal {{ $pesanan->updated_at->format('d M Y') }}.
+                                    @if ($pesanan->progres >= 2) Pesanan telah diterima oleh Petugas pada tanggal {{ $pesanan->updated_at->format('d M Y') }}.
                                     @else Pesanan telah diterima.
                                     @endif
                                     @break
                                 @case('Pesanan Diproses')
-                                    Pesanan sedang diproses, <a href="{{ route('ticket.edit', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
+                                    Pesanan sedang diproses, <a href="{{ route('ticket.progress', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
                                     @break
                                 @case('Selesai')
                                     Pesanan telah selesai.
@@ -129,7 +138,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Nama_barang</th>
+                                <th>Nama Barang</th>
                                 <th>Harga</th>
                                 <th>Jumlah</th>
                                 <th>Subtotal</th>
@@ -167,7 +176,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th width="5%">No</th>
-                                <th>Nama_jasa</th>
+                                <th>Nama Jasa</th>
                                 <th>Harga</th>
                                 <th>Jumlah</th>
                                 <th>Subtotal</th>
