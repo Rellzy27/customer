@@ -35,8 +35,9 @@ class TicketController extends Controller
         }
 
         $pesanan = Pesanan::find($ticket);
-        $pesanan_barang = PesananBarang::where('kd_pesanan_detail', $pesanan->kd_pesanan_detail)->get();
-        $pesanan_jasa = Pesanan_Jasa::where('kd_pesanan_detail', $pesanan->kd_pesanan_detail)->get();
+        $pesanan_detail = Pesanan_Detail::where('kd_pesanan', $pesanan->kd_pesanan)->first();
+        $pesanan_barang = PesananBarang::where('kd_pesanan_detail', $pesanan_detail->kd_pesanan_detail)->get();
+        $pesanan_jasa = Pesanan_Jasa::where('kd_pesanan_detail', $pesanan_detail->kd_pesanan_detail)->get();
         foreach ($pesanan_barang as $barang) {
             $barang->barang = Barang::find($barang->kd_barang);
         }
