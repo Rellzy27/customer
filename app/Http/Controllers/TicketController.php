@@ -47,6 +47,9 @@ class TicketController extends Controller
     public function progress($ticket)
     {
         $pesanan = Pesanan::find($ticket);
+        if ($pesanan->progres <= '2') {
+            return redirect()->route('ticket.detail', $pesanan->kd_pesanan);
+        }
         $progress = Pesanan_Progress::where('kd_pesanan', $pesanan->kd_pesanan)->get();
         return view('ticket.progress', compact('pesanan', 'progress'));
     }
@@ -65,7 +68,7 @@ class TicketController extends Controller
         $appointmentDate = Carbon::createFromFormat('d/m/Y', $request->tanggal);
         if ($appointmentDate->isPast() && !$appointmentDate->isToday()) {
             return redirect()->back()
-                ->with('toast_error', 'Tanggal appointment tidak boleh kurang dari hari ini.')
+                ->with('toast_error', 'Tanggal temu tidak boleh kurang dari hari ini.')
                 ->withInput();
         }
 
@@ -104,7 +107,7 @@ class TicketController extends Controller
         $appointmentDate = Carbon::createFromFormat('d/m/Y', $request->tanggal);
         if ($appointmentDate->isPast() && !$appointmentDate->isToday()) {
             return redirect()->back()
-                ->with('toast_error', 'Tanggal appointment tidak boleh kurang dari hari ini.')
+                ->with('toast_error', 'Tanggal temu tidak boleh kurang dari hari ini.')
                 ->withInput();
         }
 

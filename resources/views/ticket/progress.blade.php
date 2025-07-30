@@ -4,14 +4,12 @@
 
 @section('css')
 <style>
-    /* General Timeline Styles */
     .timeline {
         position: relative;
         padding: 20px 0;
         list-style: none;
     }
 
-    /* The vertical line */
     .timeline:before {
         content: '';
         position: absolute;
@@ -31,7 +29,6 @@
         margin-bottom: 0;
     }
 
-    /* The circle icon on the timeline */
     .timeline-icon {
         position: absolute;
         left: 40px;
@@ -50,21 +47,16 @@
     }
 
     .timeline-item.success .timeline-icon {
-        background-color: #28a745;
-        /* Green for success/completed */
-    }
+        background-color: #28a745;    }
 
     .timeline-item.info .timeline-icon {
         background-color: #17a2b8;
-        /* Blue for info/in-progress */
     }
 
     .timeline-item.warning .timeline-icon {
         background-color: #ffc107;
-        /* Yellow for pending/warning */
     }
 
-    /* The content box for each timeline item */
     .timeline-content {
         margin-left: 75px;
         background-color: #f8f9fa;
@@ -73,7 +65,6 @@
         position: relative;
     }
 
-    /* The arrow pointing to the timeline */
     .timeline-content:before {
         content: ' ';
         height: 0;
@@ -95,83 +86,39 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 mt-3 mb-3">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Progress Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
             </div>
             <div class="card-body">
                 <ul class="timeline">
-                    <li class="timeline-item success">
-                        <div class="timeline-icon">
-                            <i class="fas fa-receipt"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <p class="font-weight-bold mb-1">Pesanan Dibuat</p>
-                            <p class="mb-1">Pesanan telah dibuat oleh {{ $pesanan->dibuat_oleh ?? 'Customer' }} dan
-                                diterima oleh sistem.</p>
-                            <span class="timeline-time">{{ $pesanan->created_at->format('d M Y, H:i') }}</span>
-                        </div>
-                    </li>
-                    @if ($pesanan->progres >= 2)
-                        <li class="timeline-item success">
+                    @forelse ($progress as $progress)
+                        <li
+                            class="timeline-item 
+                                        @if(Str::contains(strtolower($progress->keterangan), 'selesai')) success @else info @endif">
                             <div class="timeline-icon">
-                                <i class="fas fa-check"></i>
+                                <i class="fas fa-tasks"></i>
                             </div>
                             <div class="timeline-content">
-                                <p class="font-weight-bold mb-1">Pesanan Diterima</p>
-                                <p>Pesanan telah diterima oleh petugas.</p>
-                                <span class="timeline-time">{{ $pesanan->updated_at->format('d M Y, H:i') }}</span>
+                                <p class="font-weight-bold mb-1">Update dari {{ $progress->dibuat_oleh }}</p>
+                                <p class="mb-1">{{ $progress->keterangan }}</p>
+                                <span class="timeline-time">{{ $progress->created_at->format('d M Y, H:i') }}</span>
                             </div>
                         </li>
-                    @else
-                        <li class="timeline-item info">
+                    @empty
+                        <li class="timeline-item warning">
                             <div class="timeline-icon">
                                 <i class="fas fa-hourglass-start"></i>
                             </div>
                             <div class="timeline-content">
-                                <p>Pesanan Belum Diterima</p>
-                                <span class="timeline-time">-</span>
+                                <p>Belum ada progress yang ditambahkan. Menunggu update dari petugas.</p>
                             </div>
                         </li>
-                    @endif
-
-                    @if ($pesanan->progres >= 3)
-
-                        @forelse ($progress as $progress)
-                            <li
-                                class="timeline-item 
-                                    @if(Str::contains(strtolower($progress->keterangan), 'selesai')) success @else info @endif">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-tasks"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <p class="font-weight-bold mb-1">Update dari {{ $progress->dibuat_oleh }}</p>
-                                    <p class="mb-1">{{ $progress->keterangan }}</p>
-                                    <span class="timeline-time">{{ $progress->created_at->format('d M Y, H:i') }}</span>
-                                </div>
-                            </li>
-                        @empty
-                            <li class="timeline-item warning">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-hourglass-start"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <p>Belum ada progress yang ditambahkan. Menunggu update dari petugas.</p>
-                                </div>
-                            </li>
-                        @endforelse                    
-                    @endif
+                    @endforelse
                 </ul>
             </div>
         </div>
     </div>
 </div>
-@endsection
-
-@section('js')
-<script>
-    $(document).ready(function () {
-    });
-</script>
 @endsection

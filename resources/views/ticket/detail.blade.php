@@ -80,6 +80,11 @@
         <h3 class="card-title">Rincian Pesanan</h3>
     </div>
     <div class="card-body">
+        @if ($pesanan->status == 2)
+            <div class="alert alert-danger">
+                Pesanan telah dibatalkan.
+            </div>
+        @else
         <div class="ticket-progress">
             @php
                 $statuses = ['Pesanan Dibuat', 'Pesanan Diterima', 'Pesanan Diproses', 'Selesai'];
@@ -93,7 +98,7 @@
                 @else
                     @foreach ($statuses as $status)
                 <li class="
-                    @if ($loop->iteration < $pesanan->progres)
+                    @if ($loop->iteration < $pesanan->progres || $pesanan->status == 1)
                         completed
                     @elseif ($loop->iteration == $pesanan->progres)
                         active
@@ -111,7 +116,11 @@
                                     @endif
                                     @break
                                 @case('Pesanan Diproses')
-                                    Pesanan sedang diproses, <a href="{{ route('ticket.progress', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
+                                    @if ($pesanan->progres >= 3)
+                                        Pesanan sedang diproses, <a href="{{ route('ticket.progress', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
+                                    @else
+                                        Pesanan sedang diproses.
+                                    @endif
                                     @break
                                 @case('Selesai')
                                     Pesanan telah selesai.
@@ -123,6 +132,7 @@
                 @endif
             </ul>
         </div>
+        @endif
     </div>
 </div>
 
@@ -197,6 +207,23 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="card-title">Subtotal</h3>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">
+                    <span class="font-weight-bold">Subtotal Barang:</span> Rp. {{ number_format($pesanan->subtotal_barang, 0, ',', '.') }}<br>
+                    <span class="font-weight-bold">Subtotal Jasa:</span> Rp. {{ number_format($pesanan->subtotal_jasa, 0, ',', '.') }}<br>
+                    <span class="font-weight-bold">Total:</span> Rp. {{ number_format($pesanan->total, 0, ',', '.') }}
+                </p>
             </div>
         </div>
     </div>
