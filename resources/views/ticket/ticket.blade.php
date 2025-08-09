@@ -68,6 +68,7 @@
                                 <th>Deskripsi</th>
                                 <th width="15%">Tanggal Janji Temu</th>
                                 <th width="15%">Status</th>
+                                <th width="10px">#</th>
                                 <th width="15%">Aksi</th>
                             </tr>
                         </thead>
@@ -90,6 +91,7 @@
                                             <span class="badge bg-danger">Batal</span>
                                         @endif
                                     </td>
+                                    <td>{{$ticket->kd_pesanan}}</td>
                                     <td class="text-center">
                                         <a href="{{route('ticket.detail', $ticket->kd_pesanan)}}" class="btn btn-info">
                                             <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"

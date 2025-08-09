@@ -77,7 +77,30 @@
 @section('content')
 <div class="card mt-3">
     <div class="card-header">
-        <h3 class="card-title">Rincian Pesanan</h3>
+        <h3 class="card-title">Rincian Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
+        <div class="card-tools float-end">
+            <button type="button" href="#" class="btn btn-danger" onclick="confirmCancel({{$pesanan->kd_pesanan}})">
+                    <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                        </path>
+                    </svg>
+                Batalkan
+            </button>
+            <a href="{{ route('dashboard') }}" class="btn btn-primary">
+                <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" fill-rule="evenodd"></path>
+                    <path
+                        d="M6.707 5.293a1 1 0 010 1.414L4.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" fill-rule="evenodd"></path>
+                </svg>
+                Kembali
+            </a>
+        </div>
     </div>
     <div class="card-body">
         @if ($pesanan->status == 2)

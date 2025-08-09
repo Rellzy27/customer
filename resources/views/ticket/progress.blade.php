@@ -90,6 +90,20 @@
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Progress Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
+                <div class="card-tools float-end">
+                    <a href="{{ route('ticket.detail', $pesanan) }}" class="btn btn-primary">
+                        <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clip-rule="evenodd" fill-rule="evenodd"></path>
+                            <path
+                                d="M6.707 5.293a1 1 0 010 1.414L4.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clip-rule="evenodd" fill-rule="evenodd"></path>
+                        </svg>
+                        Kembali
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <ul class="timeline">
