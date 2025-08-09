@@ -79,6 +79,7 @@
     <div class="card-header">
         <h3 class="card-title">Rincian Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
         <div class="card-tools float-end">
+            @if ($pesanan->status != 2 && $pesanan->progres != 3 && $pesanan->progres != 4 && \Carbon\Carbon::now()->diffInHours($pesanan->created_at) < 24)
             <button type="button" href="#" class="btn btn-danger" onclick="confirmCancel({{$pesanan->kd_pesanan}})">
                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -88,6 +89,7 @@
                     </svg>
                 Batalkan
             </button>
+            @endif
             <a href="{{ route('dashboard') }}" class="btn btn-primary">
                 <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
