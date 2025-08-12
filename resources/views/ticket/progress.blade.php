@@ -118,18 +118,18 @@
                         @forelse ($progress as $progress)
                             <li
                                 class="timeline-item 
-                                                        @if(Str::contains(strtolower($progress->keterangan), 'selesai')) success @else info @endif">
+                                        @if(Str::contains(strtolower($progress->keterangan), 'selesai')) success @else info @endif">
                                 <div class="timeline-icon">
                                     <i class="fas fa-tasks"></i>
                                 </div>
                                 <div class="timeline-content">
-                                    <p class="font-weight-bold mb-1">Update dari {{ $p->dibuat_oleh }}</p>
-                                    <p class="mb-1">{!! $p->keterangan !!}</p>
-                                    <span class="timeline-time">{{ $p->created_at->format('d M Y, H:i') }}
-                                        @if ($p->created_at->format('d M Y') == $p->updated_at->format('d M Y') && $p->created_at != $p->updated_at)
-                                            (Diedit pada {{ $p->updated_at->format('H:i') }})
-                                        @elseif ($p->created_at != $p->updated_at)
-                                            (Diedit pada {{ $p->updated_at->format('d M Y, H:i') }})
+                                    <p class="font-weight-bold mb-1">Update dari {{ $progress->dibuat_oleh }}</p>
+                                    <p class="mb-1">{!! $progress->keterangan !!}</p>
+                                    <span class="timeline-time">{{ $progress->created_at->format('d M Y, H:i') }}
+                                        @if ($progress->created_at->format('d M Y') == $progress->updated_at->format('d M Y') && $progress->created_at != $progress->updated_at)
+                                            (Diedit pada {{ $progress->updated_at->format('H:i') }})
+                                        @elseif ($progress->created_at != $progress->updated_at)
+                                            (Diedit pada {{ $progress->updated_at->format('d M Y, H:i') }})
                                         @endif</span>
                                 </div>
                             </li>
