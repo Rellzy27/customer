@@ -123,14 +123,13 @@
                                     <i class="fas fa-tasks"></i>
                                 </div>
                                 <div class="timeline-content">
-                                    <p class="font-weight-bold mb-1">Update dari {{ $progress->dibuat_oleh }}</p>
                                     <p class="mb-1">{!! $progress->keterangan !!}</p>
                                     <span class="timeline-time">{{ $progress->created_at->format('d M Y, H:i') }}
                                         @if ($progress->created_at->format('d M Y') == $progress->updated_at->format('d M Y') && $progress->created_at != $progress->updated_at)
                                             (Diedit pada {{ $progress->updated_at->format('H:i') }})
                                         @elseif ($progress->created_at != $progress->updated_at)
                                             (Diedit pada {{ $progress->updated_at->format('d M Y, H:i') }})
-                                        @endif</span>
+                                        @endif | by {{ $progress->karyawan->nama }}</span>
                                 </div>
                             </li>
                         @empty

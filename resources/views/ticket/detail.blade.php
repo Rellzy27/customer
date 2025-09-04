@@ -133,7 +133,7 @@
                         <div class="step-info">
                             @switch($status)
                                 @case('Pesanan Dibuat')
-                                    Pesanan telah dibuat oleh @if ($pesanan->kd_karyawan == null) {{$pesanan->dibuat_oleh}} @else Staff @endif pada tanggal {{ $pesanan->created_at->format('d M Y') }}
+                                    Pesanan telah dibuat oleh {{ $pesanan->kd_karyawan ? 'Petugas' : $pesanan->pelanggan->nama_pelanggan }} pada tanggal {{ $pesanan->created_at->format('d M Y') }}
                                     @break
                                 @case('Pesanan Diterima')
                                     @if ($pesanan->progres >= 2) Pesanan telah diterima oleh Petugas pada tanggal {{ $pesanan->updated_at->format('d M Y') }}.

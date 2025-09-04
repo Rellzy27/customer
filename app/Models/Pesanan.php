@@ -20,4 +20,14 @@ class Pesanan extends Model
         'kd_karyawan',
         'dibuat_oleh',
     ];
+
+    public function pelanggan()
+    {
+        return $this->belongsTo(Pelanggan::class, 'kd_pelanggan', 'kd_pelanggan');
+    }
+
+    public function karyawan()
+    {
+        return $this->belongsTo(Karyawan::class, 'kd_karyawan', 'kd_karyawan');
+    }
 }
