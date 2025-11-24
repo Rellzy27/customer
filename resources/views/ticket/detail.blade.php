@@ -79,7 +79,7 @@
     <div class="card-header">
         <h3 class="card-title">Rincian Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
         <div class="card-tools float-end">
-            @if ($pesanan->status != 2 && $pesanan->progres != 3 && $pesanan->progres != 4 && \Carbon\Carbon::now()->diffInHours($pesanan->created_at) < 24)
+            @if ($pesanan->status != 2 && $pesanan->progres < 2)
             <button type="button" href="#" class="btn btn-danger" onclick="confirmCancel({{$pesanan->kd_pesanan}})">
                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -201,7 +201,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <div class="card mt-4">
+        <div class="card mt-4 mb-4">
             <div class="card-header">
                 <h3 class="card-title">Jasa</h3>
             </div>
@@ -218,17 +218,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
                                 @forelse ($pesanan_jasa as $jasa)
+                                <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$jasa->nama_jasa}}</td>
                                     <td>{{$jasa->harga_jasa}}</td>
                                     <td>{{$jasa->jumlah}}</td>
                                     <td>{{number_format($jasa->subtotal, 2, ',', '.')}}</td>
+                                </tr>
                                 @empty
+                                <tr>
                                     <td colspan="5" class="text-center">Data Kosong</td>
+                                </tr>
                                 @endforelse
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -236,7 +238,7 @@
         </div>
     </div>
 </div>
-
+@if ($pesanan->status == 1)
 <div class="row mb-3">
     <div class="col-md-12">
         <div class="card mt-4">
@@ -253,5 +255,7 @@
         </div>
     </div>
 </div>
+@endif
+
 @endsection
 
