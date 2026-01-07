@@ -15,11 +15,12 @@
                     <div class="form-group mb-3">
                         <label for="name">Nama</label>
                         <input type="text" class="form-control" id="name" name="name"
-                            value="{{ $user->nama_pelanggan }}" readonly>
+                            value="{{ $user->nama_pelanggan }}" disabled>
                     </div>
                     <div class="form-group mb-3">
                         <label for="jenis">Jenis</label>
                         <select class="form-control" id="jenis" name="jenis" required>
+                            <option value="" disabled selected>Pilih Jenis Layanan...</option>
                             <option value="Pasang Baru">Pasang Baru</option>
                             <option value="Perbaiki">Perbaiki</option>
                             <option value="Pesanan">Pesanan</option>
