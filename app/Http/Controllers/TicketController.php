@@ -106,6 +106,10 @@ class TicketController extends Controller
             'dibuat_oleh' => 'Pelanggan',
         ]);
 
+        Pesanan::where('kd_tiket', $tiket->kd_tiket)->update([
+            'progres' => '1'
+        ]);
+
         if ($tiket) {
             return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil dibuat.');
         }
