@@ -74,10 +74,10 @@
                             </thead>
                             <tbody>
                                 @forelse ($pesanan as $ticket)
-                                    <tr>
+                                    <tr class="text-center">
                                         <td>{{$loop->iteration}}</td>
-                                        <td>{{$ticket->deskripsi_pesanan}}</td>
-                                        <td>{{$ticket->tanggal}}</td>
+                                        <td>{{$ticket->tiket->deskripsi}}</td>
+                                        <td>{{$ticket->tiket->tanggal}}</td>
                                         <td class="text-center">
                                             @if ($ticket->status == 1)
                                                 <span class="badge bg-success">Selesai</span>
@@ -91,9 +91,9 @@
                                                 <span class="badge bg-danger">Batal</span>
                                             @endif
                                         </td>
-                                        <td>{{$ticket->kd_pesanan}}</td>
+                                        <td>{{$ticket->kd_tiket}}</td>
                                         <td class="text-center">
-                                            <a href="{{route('ticket.detail', $ticket->kd_pesanan)}}" class="btn btn-info">
+                                            <a href="{{route('ticket.detail', $ticket->kd_tiket)}}" class="btn btn-info">
                                                 <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -106,7 +106,7 @@
                                             </a>
                                             @if ($ticket->status != 2 && $ticket->progres < 2)
                                                 <button type="button" class="btn btn-primary tombol-edit" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal" data-id="{{$ticket->kd_pesanan}}"
+                                                    data-bs-target="#editModal" data-id="{{$ticket->kd_tiket}}"
                                                     data-deskripsi="{{$ticket->deskripsi_pesanan}}"
                                                     data-tanggal="{{$ticket->tanggal}}">
                                                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
@@ -117,7 +117,7 @@
                                                     </svg>
                                                 </button>
                                                 <button type="button" href="#" class="btn btn-danger"
-                                                    onclick="confirmCancel({{$ticket->kd_pesanan}})">
+                                                    onclick="confirmCancel({{$ticket->kd_tiket}})">
                                                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

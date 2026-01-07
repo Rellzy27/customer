@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Pesanan;
 use App\Models\Pesanan_Detail;
 use App\Models\Pesanan_Jasa;
 use App\Models\Pesanan_Progress;
 use App\Models\PesananBarang;
+use App\Models\Quotation;
+use App\Models\QuotationItem;
+use App\Models\Tiket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,21 +33,38 @@ class TicketController extends Controller
 
     public function detail($ticket)
     {
-        $auth_check = Auth::guard('pelanggan')->user()->kd_pelanggan;
+        $tiket = Tiket::find($ticket);
+        $pesanan = Pesanan::where('kd_tiket', $tiket->kd_tiket)->first();
+        // $surat_perintah = SuratPerintahKerja::where('kd_pesanan', $pesanan->kd_pesanan)->get();
 
-        if (Pesanan::find($ticket) == null || $auth_check != Pesanan::find($ticket)->kd_pelanggan) {
-            abort(403, 'Unauthorized action.');
+        $currentUrl = url()->current();
+        $normalizedUrl = rtrim($currentUrl, '/');
+
+        $backUrl = dirname($normalizedUrl);
+
+        if ($pesanan->jenis == 'Quotation') {
+            $billing = Quotation::where('kd_tiket', $pesanan->kd_tiket)->first();
+            $billing_barang = QuotationItem::where('kd_quotation', $billing->kd_quotation)->where('kd_barang', '!=', null)->get();
+            $billing_jasa = QuotationItem::where('kd_quotation', $billing->kd_quotation)->where('kd_jasa', '!=', null)->get();
+        } elseif ($pesanan->jenis == 'Invoice') {
+            $quotation = Quotation::where('kd_tiket', $pesanan->kd_tiket)->first();
+            $billing = Invoice::where('kd_quotation', $quotation->kd_quotation)->first();
+            $billing_barang = InvoiceItem::where('kd_invoice', $billing->kd_invoice)->where('kd_barang', '!=', null)->get();
+            $billing_jasa = InvoiceItem::where('kd_invoice', $billing->kd_invoice)->where('kd_jasa', '!=', null)->get();
+        } else {
+            Quotation::create([
+                'kd_tiket' => $pesanan->kd_tiket,
+                'dibuat_oleh' => $pesanan->dibuat_oleh
+            ]);
+            $pesanan->update([
+                'jenis' => 'Quotation'
+            ]);
+            $billing = Quotation::where('kd_tiket', $pesanan->kd_tiket)->first();
+            $billing_barang = QuotationItem::where('kd_quotation', $billing->kd_quotation)->where('kd_barang', '!=', null)->get();
+            $billing_jasa = QuotationItem::where('kd_quotation', $billing->kd_quotation)->where('kd_jasa', '!=', null)->get();
         }
-
-        $pesanan = Pesanan::find($ticket);
-        $pesanan_detail = Pesanan_Detail::where('kd_pesanan', $pesanan->kd_pesanan)->first();
-        $pesanan_barang = PesananBarang::where('kd_pesanan_detail', $pesanan_detail->kd_pesanan_detail)->get();
-        $pesanan_jasa = Pesanan_Jasa::where('kd_pesanan_detail', $pesanan_detail->kd_pesanan_detail)->get();
-        foreach ($pesanan_barang as $barang) {
-            $barang->barang = Barang::find($barang->kd_barang);
-        }
-
-        return view('ticket.detail', compact('pesanan', 'pesanan_barang', 'pesanan_jasa'));
+        
+        return view('ticket.detail', compact('pesanan', 'billing', 'billing_barang', 'billing_jasa', 'backUrl'));
     }
 
     public function progress($ticket)
@@ -59,6 +81,7 @@ class TicketController extends Controller
     {
         $validated = Validator::make($request->all(), [
             'deskripsi_pesanan' => ['required', 'string', 'max:255'],
+            'jenis' => ['required', 'string', 'max:255'],
             'tanggal' => ['required', 'string'],
         ]);
 
@@ -73,22 +96,17 @@ class TicketController extends Controller
                 ->withInput();
         }
 
-        $pesanan = Pesanan::create([
+        $tiket = Tiket::create([
             'kd_pelanggan' => Auth::guard('pelanggan')->user()->kd_pelanggan,
-            'deskripsi_pesanan' => $request->deskripsi_pesanan,
-            'tanggal' => $request->tanggal,
-            'dibuat_oleh' => Auth::guard('pelanggan')->user()->nama_pelanggan
+            'deskripsi' => $request->deskripsi_pesanan,
+            'tanggal' => Carbon::createFromFormat('d/m/Y', $request->tanggal)->format('Y-m-d'),
+            'jenis' => $request->jenis,
+            'via' => 'Web',
+            'prioritas' => '1',
+            'dibuat_oleh' => 'Pelanggan',
         ]);
 
-        if ($pesanan) {
-            Pesanan_Detail::create([
-                'kd_pelanggan' => Auth::guard('pelanggan')->user()->kd_pelanggan,
-                'kd_pesanan' => $pesanan->kd_pesanan,
-                'dibuat_oleh' => Auth::guard('pelanggan')->user()->nama_pelanggan
-            ]);
-        }
-
-        if ($pesanan) {
+        if ($tiket) {
             return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil dibuat.');
         }
         return redirect()->route('ticket.create')->with('error', 'Pesanan gagal dibuat.');

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pesanan extends Model
 {
@@ -11,23 +13,31 @@ class Pesanan extends Model
 
     protected $table = 'pesanan';
     protected $primaryKey = 'kd_pesanan';
+
     protected $fillable = [
+        'kd_karyawan',
         'kd_pelanggan',
         'deskripsi_pesanan',
-        'tanggal',
         'status',
+        'tanggal',
         'progres',
-        'kd_karyawan',
+        'jenis',
+        'kd_tiket',
         'dibuat_oleh',
     ];
 
-    public function pelanggan()
+    public function karyawan(): BelongsTo
+    {
+        return $this->belongsTo(Karyawan::class, 'kd_karyawan', 'kd_karyawan');
+    }
+
+    public function pelanggan(): BelongsTo
     {
         return $this->belongsTo(Pelanggan::class, 'kd_pelanggan', 'kd_pelanggan');
     }
 
-    public function karyawan()
+    public function tiket(): BelongsTo
     {
-        return $this->belongsTo(Karyawan::class, 'kd_karyawan', 'kd_karyawan');
+        return $this->belongsTo(Tiket::class, 'kd_tiket', 'kd_tiket');
     }
 }

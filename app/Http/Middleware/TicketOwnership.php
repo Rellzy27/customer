@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Pesanan;
+use App\Models\Tiket;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class TicketOwnership
         $auth_check = Auth::guard('pelanggan')->user()->kd_pelanggan;
         $ticket = $request->route('ticket'); // assuming the ticket is passed as a route parameter
 
-        if (Pesanan::find($ticket) == null || $auth_check != Pesanan::find($ticket)->kd_pelanggan) {
+        if (Tiket::find($ticket) == null || $auth_check != Tiket::find($ticket)->kd_pelanggan) {
             abort(403, 'Unauthorized action.');
         }
         return $next($request);

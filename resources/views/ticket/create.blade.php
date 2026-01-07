@@ -18,6 +18,14 @@
                             value="{{ $user->nama_pelanggan }}" readonly>
                     </div>
                     <div class="form-group mb-3">
+                        <label for="jenis">Jenis</label>
+                        <select class="form-control" id="jenis" name="jenis" required>
+                            <option value="Pasang Baru">Pasang Baru</option>
+                            <option value="Perbaiki">Perbaiki</option>
+                            <option value="Pesanan">Pesanan</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
                         <label for="deskripsi_pesanan">Deskripsi</label>
                         <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4"
                             required></textarea>

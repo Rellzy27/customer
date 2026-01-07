@@ -133,7 +133,7 @@
                         <div class="step-info">
                             @switch($status)
                                 @case('Pesanan Dibuat')
-                                    Pesanan telah dibuat oleh {{ $pesanan->kd_karyawan ? 'Petugas' : $pesanan->pelanggan->nama_pelanggan }} pada tanggal {{ $pesanan->created_at->format('d M Y') }}
+                                    Pesanan telah dibuat oleh {{ $pesanan->tiket->dibuat_oleh == 'Pelanggan' ? 'Petugas' : $pesanan->pelanggan->nama_pelanggan }} pada tanggal {{ $pesanan->created_at->format('d M Y') }}
                                     @break
                                 @case('Pesanan Diterima')
                                     @if ($pesanan->progres >= 2) Pesanan telah diterima oleh Petugas pada tanggal {{ $pesanan->updated_at->format('d M Y') }}.
@@ -180,17 +180,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                @forelse ($pesanan_barang as $barang)
+                            @forelse ($billing_barang as $barang)
+                                <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$barang->barang->nama_barang}}</td>
-                                    <td>{{$barang->barang->harga}}</td>
+                                    <td>{{number_format($barang->harga, 2, ',', '.')}}</td>
                                     <td>{{$barang->jumlah}}</td>
-                                    <td>{{$barang->subtotal}}</td>
-                                @empty
+                                    <td>{{number_format($barang->subtotal, 2, ',', '.')}}</td>
+                                </tr>
+                            @empty
+                                <tr>
                                     <td colspan="5" class="text-center">Data Kosong</td>
-                                @endforelse
-                            </tr>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -218,11 +220,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                                @forelse ($pesanan_jasa as $jasa)
+                                @forelse ($billing_jasa as $jasa)
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$jasa->nama_jasa}}</td>
-                                    <td>{{$jasa->harga_jasa}}</td>
+                                    <td>{{$jasa->jasa->nama_jasa}}</td>
+                                    <td>{{number_format($jasa->harga, 2, ',', '.')}}</td>
                                     <td>{{$jasa->jumlah}}</td>
                                     <td>{{number_format($jasa->subtotal, 2, ',', '.')}}</td>
                                 </tr>
