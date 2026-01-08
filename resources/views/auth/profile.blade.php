@@ -153,10 +153,10 @@
                     </form>
                     <div class="profile-pic-container" id="profile-pic-trigger">
                         <img class="profile-user-img img-fluid rounded-circle" id="profile-pic-preview" src="{{ $user->foto ? Storage::url($user->foto) : asset('default.png') }}" alt="User profile picture">
-                        <div class="upload-overlay">
+                        <!-- <div class="upload-overlay">
                             <i class="fas fa-camera"></i>
                             <span>Ganti Foto</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <h3 class="profile-username text-center mt-3 mb-0">{{ $user->username }}</h3>
@@ -276,9 +276,9 @@
             icon.toggleClass('fa-eye fa-eye-slash');
         });
 
-        $('#profile-pic-trigger').on('click', function () {
-            $('#foto-upload').click();
-        });
+        // $('#profile-pic-trigger').on('click', function () {
+        //     $('#foto-upload').click();
+        // });
 
         $('#foto-upload').on('change', function () {
             let formData = new FormData($('#photo-upload-form')[0]);
