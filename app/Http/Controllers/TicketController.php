@@ -127,25 +127,28 @@ class TicketController extends Controller
             return redirect()->back()->withErrors($validated)->withInput();
         }
 
+        $tiket = Tiket::where('kd_tiket', $ticket)->first();
+
         $appointmentDate = Carbon::createFromFormat('d/m/Y', $request->tanggal);
-        if ($appointmentDate->isPast() && !$appointmentDate->isToday()) {
+        if (Carbon::createFromFormat('d/m/Y', $request->tanggal)->format('Y-m-d') != $tiket->tanggal && $appointmentDate->isPast() && !$appointmentDate->isToday()) {
             return redirect()->back()
                 ->with('toast_error', 'Tanggal temu tidak boleh kurang dari hari ini.')
                 ->withInput();
         }
 
-        $pesanan = Pesanan::find($ticket);
-        $pesanan->deskripsi_pesanan = $request->deskripsi_pesanan;
-        $pesanan->tanggal = $request->tanggal;
-        $pesanan->save();
+        $tiket->update([
+            'deskripsi' => $request->deskripsi_pesanan,
+            'tanggal' => Carbon::createFromFormat('d/m/Y', $request->tanggal)->format('Y-m-d'),
+        ]);
+
         return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil diubah.');
     }
 
     public function cancel($ticket)
     {
-        $pesanan = Pesanan::find($ticket);
-        $pesanan->status = '2';
-        $pesanan->save();
+        Pesanan::where('kd_tiket', $ticket)->update([
+            'status' => '2'
+        ]);
         return redirect()->route('dashboard')->with('toast_success', 'Pesanan berhasil dibatalkan.');
     }
 

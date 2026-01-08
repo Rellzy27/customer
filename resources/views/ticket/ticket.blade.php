@@ -7,18 +7,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <p class="modal-title">Edit ticket.</p>
+                    <p class="modal-title">Edit Pesanan.</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="" method="POST" id="editForm">
                         @csrf
                         @method('PUT')
-                        <div class="form-group mb-3">
-                            <label for="deskripsi_pesanan">Deskripsi</label>
-                            <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4"
-                                required>{{old('deskripsi_pesanan')}}</textarea>
-                        </div>
                         <div class="form-group mb-3">
                             <label for="appointment_date">Tanggal Janji Temu</label>
                             <div class="input-group">
@@ -34,10 +29,15 @@
                                     placeholder="dd/mm/yyyy" autocomplete="off" value="{{old('tanggal')}}" required>
                             </div>
                         </div>
+                        <div class="form-group mb-3">
+                            <label for="deskripsi_pesanan">Deskripsi</label>
+                            <textarea class="form-control" id="deskripsi_pesanan" name="deskripsi_pesanan" rows="4"
+                                required>{{old('deskripsi_pesanan')}}</textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" form="editForm" class="btn btn-sm btn-primary">Edit</button>
+                    <button type="submit" form="editForm" class="btn btn-sm btn-primary" id="editSubmit">Edit</button>
                     <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Batal</button>
                 </div>
             </div>
@@ -77,7 +77,7 @@
                                     <tr class="text-center">
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$ticket->tiket->deskripsi}}</td>
-                                        <td>{{$ticket->tiket->tanggal}}</td>
+                                        <td>{{\Carbon\Carbon::parse($ticket->tiket->tanggal)->format('d/m/Y')}}</td>
                                         <td class="text-center">
                                             @if ($ticket->status == 1)
                                                 <span class="badge bg-success">Selesai</span>
@@ -107,8 +107,8 @@
                                             @if ($ticket->status != 2 && $ticket->progres < 2)
                                                 <button type="button" class="btn btn-primary tombol-edit" data-bs-toggle="modal"
                                                     data-bs-target="#editModal" data-id="{{$ticket->kd_tiket}}"
-                                                    data-deskripsi="{{$ticket->deskripsi_pesanan}}"
-                                                    data-tanggal="{{$ticket->tanggal}}">
+                                                    data-deskripsi="{{$ticket->tiket->deskripsi}}"
+                                                    data-tanggal="{{\Carbon\Carbon::parse($ticket->tiket->tanggal)->format('d/m/Y')}}">
                                                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -160,6 +160,16 @@
                 new Datepicker(datepickerEl, {
                     format: 'dd/mm/yyyy',
                     autohide: true,
+                });
+            }
+            const deskripsiEdit = document.getElementById('deskripsi_pesanan');
+            if (deskripsiEdit) {
+                deskripsiEdit.addEventListener('keydown', function (e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        console.log(this.closest('form'));
+                        this.closest('form').submit();
+                    }
                 });
             }
         });
