@@ -174,9 +174,13 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th>Nama Barang</th>
-                                <th>Harga</th>
-                                <th>Jumlah</th>
-                                <th>Subtotal</th>
+                                @if ($pesanan->status == 1)
+                                    <th width="15%">Harga</th>
+                                @endif
+                                <th width="15%">Jumlah</th>
+                                @if ($pesanan->status == 1)
+                                    <th width="15%">Subtotal</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -184,9 +188,13 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$barang->barang->nama_barang}}</td>
-                                    <td>{{number_format($barang->harga, 2, ',', '.')}}</td>
+                                    @if ($pesanan->status == 1)
+                                        <td>{{number_format($barang->harga, 2, ',', '.')}}</td>
+                                    @endif
                                     <td>{{$barang->jumlah}}</td>
-                                    <td>{{number_format($barang->subtotal, 2, ',', '.')}}</td>
+                                    @if ($pesanan->status == 1)
+                                        <td>{{number_format($barang->subtotal, 2, ',', '.')}}</td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
@@ -214,9 +222,13 @@
                             <tr>
                                 <th width="5%">No</th>
                                 <th>Nama Jasa</th>
-                                <th>Harga</th>
-                                <th>Jumlah</th>
-                                <th>Subtotal</th>
+                                @if ($pesanan->status == 1)
+                                    <th width="15%">Harga</th>
+                                @endif
+                                <th width="15%">Jumlah</th>
+                                @if ($pesanan->status == 1)
+                                    <th width="15%">Subtotal</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -224,9 +236,13 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$jasa->jasa->nama_jasa}}</td>
-                                    <td>{{number_format($jasa->harga, 2, ',', '.')}}</td>
+                                    @if ($pesanan->status == 1)
+                                        <td>{{number_format($jasa->harga, 2, ',', '.')}}</td>
+                                    @endif
                                     <td>{{$jasa->jumlah}}</td>
-                                    <td>{{number_format($jasa->subtotal, 2, ',', '.')}}</td>
+                                    @if ($pesanan->status == 1)
+                                        <td>{{number_format($jasa->subtotal, 2, ',', '.')}}</td>
+                                    @endif
                                 </tr>
                                 @empty
                                 <tr>
@@ -249,9 +265,9 @@
             </div>
             <div class="card-body">
                 <p class="mb-0">
-                    <span class="font-weight-bold">Subtotal Barang:</span> Rp. {{ number_format($pesanan_barang->sum('subtotal'), 2, ',', '.') }}<br>
-                    <span class="font-weight-bold">Subtotal Jasa:</span> Rp. {{ number_format($pesanan_jasa->sum('subtotal'), 2, ',', '.') }}<br>
-                    <span class="font-weight-bold">Total:</span> Rp. {{ number_format($pesanan_jasa->sum('subtotal') + $pesanan_barang->sum('subtotal'), 2, ',', '.') }}
+                    <span class="font-weight-bold">Subtotal Barang:</span> Rp. {{ number_format($billing_barang->sum('subtotal'), 2, ',', '.') }}<br>
+                    <span class="font-weight-bold">Subtotal Jasa:</span> Rp. {{ number_format($billing_jasa->sum('subtotal'), 2, ',', '.') }}<br>
+                    <span class="font-weight-bold">Total:</span> Rp. {{ number_format($billing_jasa->sum('subtotal') + $billing_barang->sum('subtotal'), 2, ',', '.') }}
                 </p>
             </div>
         </div>
