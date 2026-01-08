@@ -77,10 +77,10 @@
 @section('content')
 <div class="card mt-3">
     <div class="card-header">
-        <h3 class="card-title">Rincian Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
+        <h3 class="card-title">Rincian Pesanan #{{ $pesanan->kd_tiket ?? 'N/A' }}</h3>
         <div class="card-tools float-end">
             @if ($pesanan->status != 2 && $pesanan->progres < 2)
-            <button type="button" href="#" class="btn btn-danger" onclick="confirmCancel({{$pesanan->kd_pesanan}})">
+            <button type="button" href="#" class="btn btn-danger" onclick="confirmCancel({{$pesanan->kd_tiket}})">
                     <svg class="icon icon-xs text-white" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -261,3 +261,22 @@
 
 @endsection
 
+@section('js')
+<script>
+    function confirmCancel($ticket) {
+            Swal.fire({
+                title: 'Batalkan Pesanan?',
+                text: "Pesanan akan dibatalkan?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Batalkan!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{route('ticket.cancel', ':id')}}".replace(':id', $ticket);
+                }
+            });
+        }
+</script>
+@endsection
