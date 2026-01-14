@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Pekerjaan;
 use App\Models\Pesanan;
 use App\Models\Pesanan_Detail;
 use App\Models\Pesanan_Jasa;
@@ -69,12 +70,10 @@ class TicketController extends Controller
 
     public function progress($ticket)
     {
-        $pesanan = Pesanan::find($ticket);
-        if ($pesanan->progres <= '2') {
-            return redirect()->route('ticket.detail', $pesanan->kd_pesanan);
-        }
-        $progress = Pesanan_Progress::where('kd_pesanan', $pesanan->kd_pesanan)->get();
-        return view('ticket.progress', compact('pesanan', 'progress'));
+        $tiket = Tiket::find($ticket);
+        $pesanan = Pesanan::where('kd_tiket', $tiket->kd_tiket)->first();
+        $pekerjaan = Pekerjaan::where('kd_tiket', $pesanan->kd_tiket)->get();
+        return view('ticket.progress', compact('pesanan', 'pekerjaan'));
     }
 
     public function store(Request $request)

@@ -142,7 +142,7 @@
                                     @break
                                 @case('Pesanan Diproses')
                                     @if ($pesanan->progres >= 3)
-                                        Pesanan sedang diproses, <a href="{{ route('ticket.progress', $pesanan->kd_pesanan) }}">Lihat Progress</a>.
+                                        Pesanan sedang diproses, <a href="{{ route('ticket.progress', $pesanan->kd_tiket) }}">Lihat Progress</a>.
                                     @else
                                         Pesanan sedang diproses.
                                     @endif

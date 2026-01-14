@@ -97,9 +97,9 @@
         <div class="col-md-12 mt-3 mb-3">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Progress Pesanan #{{ $pesanan->kd_pesanan ?? 'N/A' }}</h3>
+                    <h3 class="card-title">Progress Pesanan #{{ $pesanan->kd_tiket ?? 'N/A' }}</h3>
                     <div class="card-tools float-end">
-                        <a href="{{ route('ticket.detail', $pesanan) }}" class="btn btn-primary">
+                        <a href="{{ route('ticket.detail', $pesanan->kd_tiket) }}" class="btn btn-primary">
                             <svg class="icon icon-xs me-1" fill="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -115,22 +115,34 @@
                 </div>
                 <div class="card-body">
                     <ul class="timeline">
-                        @forelse ($progress as $progress)
-                            <li
-                                class="timeline-item 
-                                        @if(Str::contains(strtolower($progress->keterangan), 'selesai')) success @else info @endif">
-                                <div class="timeline-icon">
-                                    <i class="fas fa-tasks"></i>
-                                </div>
-                                <div class="timeline-content">
-                                    <p class="mb-1">{!! $progress->keterangan !!}</p>
-                                    <span class="timeline-time">{{ $progress->created_at->format('d M Y, H:i') }}
-                                        @if ($progress->created_at->format('d M Y') == $progress->updated_at->format('d M Y') && $progress->created_at != $progress->updated_at)
-                                            (Diedit pada {{ $progress->updated_at->format('H:i') }})
-                                        @elseif ($progress->created_at != $progress->updated_at)
-                                            (Diedit pada {{ $progress->updated_at->format('d M Y, H:i') }})
-                                        @endif | by {{ $progress->karyawan->nama }}</span>
-                                </div>
+                        @forelse ($pekerjaan as $row)
+                            @if ($row->status == 'Selesai')
+                                <li class="timeline-item success">
+                            @elseif ($row->status == 'Akan Dikerjakan' || $row->status == 'Ditunda')
+                                <li class="timeline-item warning">
+                            @else
+                                <li class="timeline-item warning">
+                            @endif
+                            <div class="timeline-icon">
+                                @if ($row->status == 'Selesai')
+                                    <i class="fas fa-check"></i>
+                                @elseif ($row->status == 'Akan Dikerjakan' || $row->status == 'Ditunda')
+                                    <i class="fas fa-hourglass"></i>
+                                @else
+                                    <i class="fas fa-hourglass-start"></i>
+                                @endif
+                            </div>
+                            <div class="timeline-content">
+                                <p class="mb-1">Pekerjaan: {{ $row->jenis }}</p>
+                                <p class="mb-1">Status: {{ $row->status }}</p>
+                                <p class="mb-1">{{ $row->keterangan_pekerjaan }}</p>
+                                <span class="timeline-time">{{ $row->created_at->format('d M Y, H:i') }}
+                                    @if ($row->created_at->format('d M Y') == $row->updated_at->format('d M Y') && $row->created_at != $row->updated_at)
+                                        (Diedit pada {{ $row->updated_at->format('H:i') }})
+                                    @elseif ($row->created_at != $row->updated_at)
+                                        (Diedit pada {{ $row->updated_at->format('d M Y, H:i') }})
+                                    @endif </span>
+                            </div>
                             </li>
                         @empty
                             <li class="timeline-item warning">
